@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Read(//usr/local/**)",
+      "Read(//Users/parthtita/.nvm/versions/node/**)",
+      "Bash(command -v bun)",
+      "Bash(/Users/parthtita/.nvm/versions/node/v20.20.0/bin/npm install:*)",
+      "Bash(export PATH=\"/Users/parthtita/.nvm/versions/node/v20.20.0/bin:$PATH\")",
+      "Bash(npm install:*)",
+      "Bash(gh auth:*)",
+      "Bash(git --version)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
