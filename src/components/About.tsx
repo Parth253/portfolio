@@ -1,12 +1,6 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
 
-const stats = [
-  { value: "100M+", label: "views generated" },
-  { value: "231K+", label: "followers grown" },
-  { value: "58.9M", label: "accounts reached" },
-];
-
 const skills = [
   "Script Writing", "Content Ideation", "SEO & AEO", "Growth Strategy",
   "Audience Research", "Trend Analysis", "Instagram", "YouTube",
@@ -48,7 +42,7 @@ const TiltTag = ({ label }: { label: string }) => {
 
 const About = () => {
   return (
-    <section id="about" className="py-12 md:py-24 px-6">
+    <section id="about" className="py-24 px-6">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -56,26 +50,9 @@ const About = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="font-serif-display text-3xl md:text-4xl mb-8 md:mb-10">
+          <h2 className="font-serif-display text-3xl md:text-4xl mb-10">
             About <span className="text-primary italic">me</span>
           </h2>
-
-          {/* Animated stats row */}
-          <div className="grid grid-cols-3 gap-3 md:gap-6 mb-8 md:mb-10">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
-                className="bg-card border border-border rounded-xl p-3 md:p-5 text-center"
-              >
-                <p className="font-body text-xl md:text-3xl font-bold text-primary">{stat.value}</p>
-                <p className="text-muted-foreground text-xs md:text-sm mt-1">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
 
           <div className="space-y-5 text-foreground leading-relaxed">
             <p>
@@ -104,7 +81,7 @@ const About = () => {
           </div>
 
           {/* Skills with 3D tilt */}
-          <div className="mt-10 md:mt-12 pt-8 border-t border-border">
+          <div className="mt-12 pt-8 border-t border-border">
             <p className="font-handwritten text-xl text-muted-foreground mb-4">What I bring to the table</p>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (

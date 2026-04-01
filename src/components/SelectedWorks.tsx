@@ -1,154 +1,141 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import catDoodle from "@/assets/cat-doodle.png";
 import artoonzzProfile from "@/assets/artoonzz-profile.jpeg";
 
-const works = [
-  {
-    client: "Motivation Corner",
-    initials: "MC",
-    initialsColor: "bg-emerald-500",
-    tags: ["Growth Strategy", "Instagram", "Page Sale"],
-    description: "Built a motivational content page from 77K to 231K+ followers. Generated 58.9M accounts reached and 79.4M impressions in a single 30-day window. The page was then sold to a USA-based buyer for $1,500.",
-    color: "bg-emerald-50",
-    profileImg: null,
-    link: null,
-    metric: "77K → 231K+",
-    badge: "Sold · $1,500",
-  },
-  {
-    client: "Artoonzz (AR)",
-    initials: null,
-    initialsColor: null,
-    tags: ["Content Ideation", "Animation Strategy", "Reels"],
-    description: "Developed the content strategy behind a 335K-follower animated page. Conceptualised relatable Indian life scenarios that generated 100M+ total views, including a single post that crossed 114M views, through character-driven storytelling rooted in everyday cultural moments.",
-    color: "bg-sky-50",
-    profileImg: artoonzzProfile,
-    link: "https://www.instagram.com/artoonzz_/",
-    metric: "100M+ views",
-    badge: null,
-  },
+const viewPosts = [
+  { views: "114M", highlight: true },
+  { views: "17.2M", highlight: false },
+  { views: "9.1M", highlight: false },
+  { views: "7.3M", highlight: false },
+  { views: "2.6M", highlight: false },
+  { views: "2.1M", highlight: false },
+  { views: "1.6M", highlight: false },
+  { views: "676K", highlight: false },
+  { views: "195K", highlight: false },
 ];
 
-const TiltCard = ({
-  children,
-  className,
-  href,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  href?: string | null;
-}) => {
-  const ref = useRef<HTMLDivElement>(null);
+const SelectedWorks = () => {
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    ref.current.style.transform = `perspective(900px) rotateX(${-y * 7}deg) rotateY(${x * 7}deg) scale3d(1.02,1.02,1.02)`;
+    cardRef.current.style.transform = `perspective(1200px) rotateX(${-y * 5}deg) rotateY(${x * 5}deg) scale3d(1.01,1.01,1.01)`;
   };
 
   const handleMouseLeave = () => {
-    if (ref.current) ref.current.style.transform = "";
+    if (cardRef.current) cardRef.current.style.transform = "";
   };
 
-  const inner = (
-    <div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ transition: "transform 0.25s ease", willChange: "transform" }}
-      className={className}
-    >
-      {children}
-    </div>
-  );
-
-  if (href) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className="block">
-        {inner}
-      </a>
-    );
-  }
-  return inner;
-};
-
-const SelectedWorks = () => {
   return (
-    <section id="works" className="py-12 md:py-24 px-6">
+    <section id="works" className="py-24 px-6">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8 md:mb-16"
+          className="text-center mb-16"
         >
-          <img
-            src={catDoodle}
-            alt=""
-            className="w-24 mx-auto mb-4"
-            loading="lazy"
-            width={512}
-            height={512}
-          />
           <h2 className="font-serif-display text-3xl md:text-4xl">
-            Selected <span className="text-primary italic">works</span>
+            Selected <span className="text-primary italic">work</span>
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {works.map((work, i) => (
-            <motion.div
-              key={work.client}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
+        {/* Artoonzz — full width artistic card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <a
+            href="https://www.instagram.com/artoonzz_/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block"
+          >
+            <div
+              ref={cardRef}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              style={{ transition: "transform 0.3s ease", willChange: "transform" }}
+              className="bg-sky-50 rounded-3xl overflow-hidden"
             >
-              <TiltCard className={`${work.color} rounded-2xl overflow-hidden`} href={work.link}>
-                <div className="p-6 pb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      {work.profileImg ? (
-                        <img
-                          src={work.profileImg}
-                          alt={work.client}
-                          className="w-12 h-12 rounded-full object-cover object-top"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className={`w-12 h-12 rounded-full ${work.initialsColor} flex items-center justify-center`}>
-                          <span className="text-white font-bold text-sm">{work.initials}</span>
-                        </div>
-                      )}
-                      <p className="font-serif-display font-semibold text-foreground">{work.client}</p>
-                    </div>
-                    {work.badge && (
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium border border-emerald-200">
-                        {work.badge}
-                      </span>
-                    )}
+              <div className="p-8 md:p-12">
+                {/* Header */}
+                <div className="flex items-center gap-4 mb-6">
+                  <img
+                    src={artoonzzProfile}
+                    alt="Artoonzz"
+                    className="w-14 h-14 rounded-full object-cover object-top ring-2 ring-sky-200"
+                    loading="lazy"
+                  />
+                  <div>
+                    <p className="font-serif-display text-xl font-semibold text-foreground">Artoonzz (AR)</p>
+                    <p className="text-muted-foreground text-sm">@artoonzz_ · 335K followers</p>
                   </div>
-
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {work.tags.map((tag) => (
-                      <span key={tag} className="text-xs px-2 py-1 rounded-full border border-border text-muted-foreground">
+                  <div className="ml-auto flex flex-wrap gap-2 justify-end hidden md:flex">
+                    {["Content Ideation", "Animation Strategy", "Reels"].map((tag) => (
+                      <span key={tag} className="text-xs px-2.5 py-1 rounded-full border border-sky-200 text-sky-700 bg-sky-100">
                         {tag}
                       </span>
                     ))}
                   </div>
-
-                  <p className="text-foreground text-sm leading-relaxed mb-6">{work.description}</p>
-
-                  <span className="font-body text-3xl font-bold text-primary">{work.metric}</span>
                 </div>
-              </TiltCard>
-            </motion.div>
-          ))}
-        </div>
+
+                {/* Description */}
+                <p className="text-foreground text-sm md:text-base leading-relaxed mb-8 max-w-2xl">
+                  Developed the content strategy behind a 335K-follower animated page. Conceptualised relatable Indian life scenarios through character-driven storytelling — turning everyday cultural moments into content that consistently crossed millions of views.
+                </p>
+
+                {/* Artistic view count mosaic */}
+                <div className="mb-8">
+                  <p className="font-handwritten text-lg text-muted-foreground mb-4">Views per post</p>
+                  <div className="grid grid-cols-3 md:grid-cols-9 gap-2">
+                    {viewPosts.map((post, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.35, delay: i * 0.06 }}
+                        className={`rounded-xl flex flex-col items-center justify-center py-3 px-1 text-center
+                          ${post.highlight
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-sky-100 border border-sky-200 text-foreground"
+                          }`}
+                      >
+                        <span className={`font-body font-bold text-sm md:text-base ${post.highlight ? "text-white" : "text-primary"}`}>
+                          {post.views}
+                        </span>
+                        <span className={`text-xs mt-0.5 ${post.highlight ? "text-orange-100" : "text-muted-foreground"}`}>
+                          views
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bottom metric */}
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="font-body text-5xl md:text-6xl font-bold text-primary">100M+</p>
+                    <p className="text-muted-foreground text-sm mt-1">total views generated</p>
+                  </div>
+                  <span className="text-muted-foreground text-sm inline-flex items-center gap-1 hover:text-primary transition-colors">
+                    View profile
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </motion.div>
       </div>
     </section>
   );

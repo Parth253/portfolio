@@ -21,14 +21,14 @@ const themePageResults = [
 
 const GrowthGallery = () => {
   return (
-    <section id="gallery" className="py-12 md:py-24 px-6">
+    <section id="gallery" className="py-24 px-6">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8 md:mb-16"
+          className="text-center mb-16"
         >
           <h2 className="font-serif-display text-3xl md:text-4xl">
             Growth <span className="text-primary italic">gallery</span>
@@ -42,7 +42,7 @@ const GrowthGallery = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-6 md:mb-8"
+          className="mb-8"
         >
           <p className="font-handwritten text-xl text-muted-foreground mb-4 text-center">Motivation Corner · Instagram</p>
           <div className="flex justify-center gap-4 md:gap-6 flex-wrap">
@@ -76,7 +76,7 @@ const GrowthGallery = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="bg-card border border-border rounded-2xl p-6 md:p-8"
+              className="bg-card border border-border rounded-2xl p-8"
             >
               <p className="font-body text-4xl md:text-5xl font-bold text-primary">{item.metric}</p>
               <p className="font-handwritten text-xl text-muted-foreground mb-3">{item.detail}</p>
