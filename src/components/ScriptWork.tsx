@@ -6,6 +6,7 @@ const formats = [
     icon: "📱",
     types: ["Short-form Reels", "Carousel Scripts", "Story Sequences"],
     description: "Hook-first scripts built for the first 3 seconds. Every reel I write is engineered to stop the scroll, hold attention, and drive saves.",
+
     color: "bg-amber-50",
     accent: "border-amber-200",
     tag: "bg-amber-100 text-amber-700 border-amber-200",
@@ -14,7 +15,7 @@ const formats = [
     platform: "YouTube",
     icon: "🎬",
     types: ["Long-form Scripts", "Short Scripts", "Explainer Videos"],
-    description: "Research-heavy scripts that keep viewers watching. From 60-second Shorts to 15-minute deep-dives — structured for retention, not just views.",
+    description: "Research-heavy scripts that keep viewers watching. From 60-second Shorts to 15-minute deep-dives, structured for retention, not just views.",
     color: "bg-rose-50",
     accent: "border-rose-200",
     tag: "bg-rose-100 text-rose-700 border-rose-200",
@@ -37,7 +38,7 @@ const ScriptWork = () => {
             Scripts that <span className="italic text-primary">perform</span>
           </h2>
           <p className="text-muted-foreground mt-4 max-w-xl leading-relaxed">
-            I write short-form and long-form scripts for Instagram and YouTube — built around your niche, your voice, and what your audience actually wants to watch.
+            I write short-form and long-form scripts for Instagram and YouTube, built around your niche, your voice, and what your audience actually wants to watch.
           </p>
         </motion.div>
 

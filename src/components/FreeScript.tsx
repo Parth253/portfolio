@@ -10,13 +10,19 @@ const FreeScript = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
+          {/* Scarcity badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-sm text-primary font-medium">I only take on 3 projects at a time</span>
+          </div>
+
           <p className="font-handwritten text-2xl text-primary mb-2">Try before you commit</p>
           <h2 className="font-serif-display text-3xl md:text-4xl mb-8">
             Get your 1st script <span className="italic text-primary">free</span>
           </h2>
 
           <p className="text-muted-foreground leading-relaxed mb-4">
-            Give me a topic and the tone of your channel — I'll deliver a research-backed script that proves my craft.
+            Give me a topic and the tone of your channel. I'll deliver a research-backed script that proves my craft.
           </p>
 
           <p className="font-handwritten text-xl text-foreground mb-10">

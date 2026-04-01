@@ -5,6 +5,7 @@ import ScriptWork from "@/components/ScriptWork";
 import SelectedWorks from "@/components/SelectedWorks";
 import GrowthGallery from "@/components/GrowthGallery";
 import Testimonials from "@/components/Testimonials";
+import HormoziQuote from "@/components/HormoziQuote";
 import FreeScript from "@/components/FreeScript";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
@@ -20,6 +21,7 @@ const Index = () => {
       <SelectedWorks />
       <GrowthGallery />
       <Testimonials />
+      <HormoziQuote />
       <FreeScript />
       <Footer />
     </div>
