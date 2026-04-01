@@ -3,14 +3,14 @@ import testimonialImg from "@/assets/testimonial.jpg";
 
 const Testimonials = () => {
   return (
-    <section className="py-24 px-6 bg-card/50">
+    <section className="py-12 md:py-24 px-6 bg-card/50">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-16"
         >
           <h2 className="font-serif-display text-3xl md:text-4xl">
             Kind words from <span className="text-primary italic">collaborators</span>

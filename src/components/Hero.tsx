@@ -3,7 +3,7 @@ import heroIllustration from "@/assets/hero-illustration.png";
 
 const Hero = () => {
   return (
-    <section className="min-h-screen flex items-center justify-center pt-20 pb-16 px-6">
+    <section className="min-h-screen flex items-center justify-center pt-20 pb-8 md:pb-16 px-6">
       <div className="max-w-4xl mx-auto w-full">
         <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12">
           {/* Left side: handwritten intro + illustration */}

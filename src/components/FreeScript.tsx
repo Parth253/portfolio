@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const FreeScript = () => {
   return (
-    <section id="free-script" className="py-24 px-6 bg-card/50">
+    <section id="free-script" className="py-12 md:py-24 px-6 bg-card/50">
       <div className="max-w-2xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
