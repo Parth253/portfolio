@@ -33,7 +33,7 @@ const GrowthGallery = () => {
           <h2 className="font-serif-display text-3xl md:text-4xl">
             Growth <span className="text-primary italic">gallery</span>
           </h2>
-          <p className="text-muted-foreground text-sm mt-3">Analytics from theme pages I've built and managed</p>
+          <p className="text-muted-foreground text-sm mt-3">Analytics from pages I've built and managed</p>
         </motion.div>
 
         {/* Motivation Corner analytics screenshots */}
@@ -42,28 +42,24 @@ const GrowthGallery = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className="mb-10"
         >
-          <p className="font-handwritten text-xl text-muted-foreground mb-4 text-center">Motivation Corner · Instagram</p>
+          <p className="font-handwritten text-xl text-muted-foreground mb-6 text-center">Motivation Corner · Instagram</p>
           <div className="flex justify-center gap-4 md:gap-6 flex-wrap">
-            <div className="bg-card rounded-2xl p-3 shadow-sm border border-border">
-              <img
-                src={mcGrowth}
-                alt="Motivation Corner: 231K followers with +56.9% growth"
-                className="w-44 md:w-60 rounded-xl"
-                loading="lazy"
-              />
-              <p className="text-center text-muted-foreground mt-2 font-handwritten text-lg">231K followers · +56.9%</p>
-            </div>
-            <div className="bg-card rounded-2xl p-3 shadow-sm border border-border">
-              <img
-                src={mcReach}
-                alt="Motivation Corner: 58.9M accounts reached"
-                className="w-44 md:w-60 rounded-xl"
-                loading="lazy"
-              />
-              <p className="text-center text-muted-foreground mt-2 font-handwritten text-lg">58.9M reach · 79.4M impressions</p>
-            </div>
+            {[
+              { src: mcGrowth, alt: "231K followers +56.9%", label: "231K followers · +56.9%" },
+              { src: mcReach, alt: "58.9M accounts reached", label: "58.9M reach · 79.4M impressions" },
+            ].map((img) => (
+              <motion.div
+                key={img.label}
+                whileHover={{ y: -4, boxShadow: "0 12px 32px rgba(0,0,0,0.08)" }}
+                transition={{ duration: 0.25 }}
+                className="bg-card rounded-2xl p-3 border border-border"
+              >
+                <img src={img.src} alt={img.alt} className="w-44 md:w-60 rounded-xl" loading="lazy" />
+                <p className="text-center text-muted-foreground mt-2 font-handwritten text-lg">{img.label}</p>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
 
@@ -76,7 +72,8 @@ const GrowthGallery = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="bg-card border border-border rounded-2xl p-8"
+              whileHover={{ y: -3, boxShadow: "0 8px 28px rgba(0,0,0,0.07)" }}
+              className="bg-card border border-border rounded-2xl p-8 transition-shadow duration-300"
             >
               <p className="font-body text-4xl md:text-5xl font-bold text-primary">{item.metric}</p>
               <p className="font-handwritten text-xl text-muted-foreground mb-3">{item.detail}</p>

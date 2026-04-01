@@ -1,24 +1,40 @@
 import { motion } from "framer-motion";
 
-const formats = [
+const steps = [
   {
-    platform: "Instagram",
-    icon: "📱",
-    types: ["Short-form Reels", "Carousel Scripts", "Story Sequences"],
-    description: "Hook-first scripts built for the first 3 seconds. Every reel I write is engineered to stop the scroll, hold attention, and drive saves.",
-
-    color: "bg-amber-50",
-    accent: "border-amber-200",
-    tag: "bg-amber-100 text-amber-700 border-amber-200",
+    number: "01",
+    title: "Branding",
+    description: "We define what you stand for before we write a single word. Voice, visual language, positioning — your content identity comes first.",
   },
   {
-    platform: "YouTube",
-    icon: "🎬",
-    types: ["Long-form Scripts", "Short Scripts", "Explainer Videos"],
-    description: "Research-heavy scripts that keep viewers watching. From 60-second Shorts to 15-minute deep-dives, structured for retention, not just views.",
-    color: "bg-rose-50",
-    accent: "border-rose-200",
-    tag: "bg-rose-100 text-rose-700 border-rose-200",
+    number: "02",
+    title: "Understanding the Tone",
+    description: "Educational, entertaining, raw, aspirational — every channel has a register. I find yours and write exclusively in it.",
+  },
+  {
+    number: "03",
+    title: "Market Research",
+    description: "Deep dive into what your audience actually watches, searches for, and shares. Data shapes the story.",
+  },
+  {
+    number: "04",
+    title: "Competitor Analysis",
+    description: "I study what's already working in your niche, find the gaps they're missing, and position your content to fill them.",
+  },
+  {
+    number: "05",
+    title: "Topic Identification",
+    description: "Not just trending topics — relevant, timely, and searchable ones specific to your audience's intent and stage of awareness.",
+  },
+  {
+    number: "06",
+    title: "Scripting",
+    description: "Hook. Build. Payoff. Every line earns its place. Scripts that are built to hold attention from the first second to the last.",
+  },
+  {
+    number: "07",
+    title: "SEO & AEO",
+    description: "Optimised for both search engines and AI answer engines. Because discoverability is half the battle.",
   },
 ];
 
@@ -35,49 +51,52 @@ const ScriptWork = () => {
         >
           <p className="font-handwritten text-xl text-primary mb-2">What I actually do</p>
           <h2 className="font-serif-display text-3xl md:text-4xl">
-            Scripts that <span className="italic text-primary">perform</span>
+            The creative <span className="italic text-primary">framework</span>
           </h2>
           <p className="text-muted-foreground mt-4 max-w-xl leading-relaxed">
-            I write short-form and long-form scripts for Instagram and YouTube, built around your niche, your voice, and what your audience actually wants to watch.
+            Every script starts long before writing. Here's the full process I run for every client, every time.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {formats.map((f, i) => (
-            <motion.div
-              key={f.platform}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className={`${f.color} border ${f.accent} rounded-3xl p-8 group hover:shadow-md transition-shadow duration-300`}
-            >
-              <span className="text-3xl mb-4 block">{f.icon}</span>
-              <h3 className="font-serif-display text-2xl font-semibold mb-3">{f.platform}</h3>
+        <div className="relative">
+          {/* Vertical connector line */}
+          <div className="absolute left-6 top-0 bottom-0 w-px bg-border hidden md:block" />
 
-              <div className="flex flex-wrap gap-2 mb-4">
-                {f.types.map((type) => (
-                  <span key={type} className={`text-xs px-2.5 py-1 rounded-full border ${f.tag}`}>
-                    {type}
+          <div className="space-y-4">
+            {steps.map((step, i) => (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: i * 0.07 }}
+                className="group relative md:pl-20 bg-card/0 hover:bg-card border border-transparent hover:border-border rounded-2xl px-4 md:px-6 py-5 transition-all duration-300 cursor-default"
+              >
+                {/* Step dot on timeline */}
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-border bg-background group-hover:border-primary group-hover:bg-primary/10 transition-colors duration-300 hidden md:block" />
+
+                <div className="flex items-start gap-5">
+                  <span className="font-serif-display text-3xl font-bold text-primary/20 group-hover:text-primary/40 transition-colors duration-300 leading-none shrink-0 w-10 text-right hidden md:block">
+                    {step.number}
                   </span>
-                ))}
-              </div>
-
-              <p className="text-foreground text-sm leading-relaxed">{f.description}</p>
-
-              {/* Animated underline on hover */}
-              <div className="mt-6 h-px bg-current opacity-10 group-hover:opacity-30 transition-opacity duration-300" />
-            </motion.div>
-          ))}
+                  <div>
+                    <h3 className="font-serif-display text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-300">
+                      {step.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Single callout line */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="font-handwritten text-2xl text-center text-muted-foreground mt-12"
+          className="font-handwritten text-2xl text-center text-muted-foreground mt-14"
         >
           One script. Zero fluff. <span className="text-primary">Just results.</span>
         </motion.p>

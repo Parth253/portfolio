@@ -62,7 +62,7 @@ const About = () => {
 
             <p>
               I've helped creators and brands go from invisible to unmissable, growing accounts from zero to 231K+ followers,
-              generating over 100 million views, and consistently crossing the 1M view threshold on individual pieces of content.
+              generating over 400 million views across platforms, and consistently crossing the 1M view threshold on individual pieces of content.
             </p>
 
             <p className="font-handwritten text-2xl text-primary">

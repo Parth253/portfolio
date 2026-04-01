@@ -36,8 +36,8 @@ const FreeScript = () => {
               "Pick a topic or let me suggest one",
               "Receive a fully researched, ready-to-shoot script",
             ].map((step, i) => (
-              <div key={step} className="flex items-start gap-4">
-                <span className="font-serif-display text-primary font-bold text-lg">0{i + 1}</span>
+              <div key={step} className="flex items-start gap-4 group/step rounded-xl px-3 py-2 hover:bg-background transition-colors duration-200">
+                <span className="font-serif-display text-primary font-bold text-lg group-hover/step:scale-110 transition-transform duration-200">0{i + 1}</span>
                 <p className="text-foreground text-sm pt-0.5">{step}</p>
               </div>
             ))}

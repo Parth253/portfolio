@@ -22,10 +22,10 @@ const Testimonials = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="bg-card border border-border rounded-2xl p-8 md:p-12 max-w-2xl mx-auto"
+          className="bg-card border border-border rounded-2xl p-8 md:p-12 max-w-2xl mx-auto hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
         >
           <blockquote className="font-serif-display text-xl md:text-2xl italic text-foreground leading-relaxed mb-6">
-            "It's all right we'll still work — I like working with you"
+            "It's all right we'll still work. I like working with you"
           </blockquote>
 
           <img
