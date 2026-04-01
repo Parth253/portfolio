@@ -1,32 +1,26 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import artoonzzProfile from "@/assets/artoonzz-profile.jpeg";
 
-const viewPosts = [
-  { views: "114M", highlight: true },
-  { views: "17.2M", highlight: false },
-  { views: "9.1M", highlight: false },
-  { views: "7.3M", highlight: false },
-  { views: "2.6M", highlight: false },
-  { views: "2.1M", highlight: false },
-  { views: "1.6M", highlight: false },
-  { views: "676K", highlight: false },
-  { views: "195K", highlight: false },
-];
-
 const SelectedWorks = () => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    cardRef.current.style.transform = `perspective(1200px) rotateX(${-y * 5}deg) rotateY(${x * 5}deg) scale3d(1.01,1.01,1.01)`;
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const rx = (y - 0.5) * -5;
+    const ry = (x - 0.5) * 5;
+    cardRef.current.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.015,1.015,1.015)`;
+    setGlowPos({ x: x * 100, y: y * 100 });
   };
 
   const handleMouseLeave = () => {
-    if (cardRef.current) cardRef.current.style.transform = "";
+    if (!cardRef.current) return;
+    cardRef.current.style.transform = "";
+    setGlowPos({ x: 50, y: 50 });
   };
 
   return (
@@ -44,7 +38,6 @@ const SelectedWorks = () => {
           </h2>
         </motion.div>
 
-        {/* Artoonzz — full width artistic card */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -61,10 +54,26 @@ const SelectedWorks = () => {
               ref={cardRef}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
-              style={{ transition: "transform 0.3s ease", willChange: "transform" }}
-              className="bg-sky-50 rounded-3xl overflow-hidden"
+              style={{
+                transition: "transform 0.3s ease",
+                willChange: "transform",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              className="bg-sky-50 rounded-3xl"
             >
-              <div className="p-8 md:p-12">
+              {/* Radial glow that follows cursor */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: `radial-gradient(400px circle at ${glowPos.x}% ${glowPos.y}%, hsl(200 80% 70% / 0.18), transparent 70%)`,
+                  pointerEvents: "none",
+                  transition: "background 0.1s ease",
+                }}
+              />
+
+              <div className="p-8 md:p-12 relative">
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-6">
                   <img
@@ -77,7 +86,7 @@ const SelectedWorks = () => {
                     <p className="font-serif-display text-xl font-semibold text-foreground">Artoonzz (AR)</p>
                     <p className="text-muted-foreground text-sm">@artoonzz_ · 335K followers</p>
                   </div>
-                  <div className="ml-auto flex flex-wrap gap-2 justify-end hidden md:flex">
+                  <div className="ml-auto flex-wrap gap-2 justify-end hidden md:flex">
                     {["Content Ideation", "Animation Strategy", "Reels"].map((tag) => (
                       <span key={tag} className="text-xs px-2.5 py-1 rounded-full border border-sky-200 text-sky-700 bg-sky-100">
                         {tag}
@@ -87,39 +96,11 @@ const SelectedWorks = () => {
                 </div>
 
                 {/* Description */}
-                <p className="text-foreground text-sm md:text-base leading-relaxed mb-8 max-w-2xl">
-                  Developed the content strategy behind a 335K-follower animated page. Conceptualised relatable Indian life scenarios through character-driven storytelling — turning everyday cultural moments into content that consistently crossed millions of views.
+                <p className="text-foreground text-sm md:text-base leading-relaxed mb-10 max-w-2xl">
+                  Developed the content strategy behind a 335K-follower animated page. Conceptualised relatable Indian life scenarios through character-driven storytelling, turning everyday cultural moments into content that consistently crossed millions of views.
                 </p>
 
-                {/* Artistic view count mosaic */}
-                <div className="mb-8">
-                  <p className="font-handwritten text-lg text-muted-foreground mb-4">Views per post</p>
-                  <div className="grid grid-cols-3 md:grid-cols-9 gap-2">
-                    {viewPosts.map((post, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.35, delay: i * 0.06 }}
-                        className={`rounded-xl flex flex-col items-center justify-center py-3 px-1 text-center
-                          ${post.highlight
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-sky-100 border border-sky-200 text-foreground"
-                          }`}
-                      >
-                        <span className={`font-body font-bold text-sm md:text-base ${post.highlight ? "text-white" : "text-primary"}`}>
-                          {post.views}
-                        </span>
-                        <span className={`text-xs mt-0.5 ${post.highlight ? "text-orange-100" : "text-muted-foreground"}`}>
-                          views
-                        </span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bottom metric */}
+                {/* Bottom metric + link */}
                 <div className="flex items-end justify-between">
                   <div>
                     <p className="font-body text-5xl md:text-6xl font-bold text-primary">100M+</p>
