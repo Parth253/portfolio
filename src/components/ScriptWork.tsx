@@ -4,12 +4,12 @@ const steps = [
   {
     number: "01",
     title: "Branding",
-    description: "We define what you stand for before we write a single word. Voice, visual language, positioning — your content identity comes first.",
+    description: "We define what you stand for before we write a single word. Voice, visual language, positioning. Your content identity comes first.",
   },
   {
     number: "02",
     title: "Understanding the Tone",
-    description: "Educational, entertaining, raw, aspirational — every channel has a register. I find yours and write exclusively in it.",
+    description: "Educational, entertaining, raw, aspirational. Every channel has a register. I find yours and write exclusively in it.",
   },
   {
     number: "03",
@@ -24,7 +24,7 @@ const steps = [
   {
     number: "05",
     title: "Topic Identification",
-    description: "Not just trending topics — relevant, timely, and searchable ones specific to your audience's intent and stage of awareness.",
+    description: "Not just trending topics. Relevant, timely, and searchable ones specific to your audience's intent and stage of awareness.",
   },
   {
     number: "06",

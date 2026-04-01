@@ -32,7 +32,7 @@ const FreeScript = () => {
           <div className="bg-card border border-border rounded-2xl p-8 text-left space-y-4 mb-8">
             {[
               "Share your channel/brand and niche",
-              "Tell me the tone — educational, entertaining, motivational",
+              "Tell me the tone: educational, entertaining, motivational",
               "Pick a topic or let me suggest one",
               "Receive a fully researched, ready-to-shoot script",
             ].map((step, i) => (
