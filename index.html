@@ -71,14 +71,12 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   position:fixed;top:0;left:0;right:0;z-index:70;
   display:flex;align-items:center;gap:16px;
   padding:clamp(14px,2vw,22px) var(--gutter);
-  background:rgba(255,255,255,.55);
-  backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
-  border-bottom:1px solid rgba(213,223,233,.4);
+  background:linear-gradient(180deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.15) 70%,transparent 100%);
   transition:padding .5s var(--ease),background .5s ease;
 }
 #top.orbit-mode{
   padding:clamp(18px,2.4vw,28px) var(--gutter);
-  background:rgba(255,255,255,.7);
+  background:linear-gradient(180deg,rgba(255,255,255,.6) 0%,rgba(255,255,255,.2) 70%,transparent 100%);
 }
 .brand{
   font-family:var(--f-serif);font-style:italic;
@@ -421,14 +419,22 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 .chscroll::-webkit-scrollbar{width:6px}
 .chscroll::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
 .close{
-  position:absolute;top:clamp(14px,2vw,20px);right:clamp(14px,2vw,22px);z-index:5;
-  width:clamp(36px,4vw,42px);height:clamp(36px,4vw,42px);border-radius:50%;
-  background:rgba(255,255,255,.9);border:1px solid var(--hair);color:var(--ink);
-  display:flex;align-items:center;justify-content:center;
-  font-size:clamp(20px,2.2vw,22px);line-height:1;
+  position:absolute;top:clamp(14px,2vw,20px);left:clamp(14px,2vw,22px);z-index:5;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:clamp(9px,1.2vw,11px) clamp(14px,1.8vw,18px);
+  border-radius:100px;
+  background:rgba(255,255,255,.85);border:1px solid var(--hair);color:var(--ink);
+  font-family:var(--f-sans);font-size:clamp(10.5px,1.05vw,11.5px);letter-spacing:.14em;text-transform:uppercase;font-weight:500;
   transition:all .3s var(--ease);
+  cursor:pointer;
 }
-.close:hover{background:var(--ink);color:var(--cloud);border-color:var(--ink);transform:rotate(90deg)}
+.close::before{
+  content:"←";font-family:var(--f-serif);font-style:italic;font-weight:500;
+  font-size:clamp(15px,1.6vw,17px);line-height:1;letter-spacing:0;
+  transition:transform .3s var(--ease);
+}
+.close:hover{background:var(--ink);color:var(--cloud);border-color:var(--ink)}
+.close:hover::before{transform:translateX(-3px)}
 
 /* chamber typography */
 .ch-eyebrow{
@@ -490,31 +496,81 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   border-radius:0 8px 8px 0;
 }
 
-/* craft */
-.craft-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(min(260px,100%), 1fr));
-  gap:clamp(12px,1.6vw,16px);margin-top:6px;
+/* craft — the map */
+.craft-map{
+  position:relative;
+  margin:clamp(24px,4vh,40px) auto 0;
+  width:100%;
+  height:clamp(1000px,120vh,1400px);
+  max-width:820px;
 }
-.tab{
-  padding:clamp(20px,2.6vw,24px) clamp(18px,2.4vw,22px);
-  border:1px solid rgba(213,223,233,.7);border-radius:12px;
-  background:rgba(255,255,255,.6);transition:all .3s var(--ease);
-  min-width:0;
+.craft-trail{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  overflow:visible;
 }
-.tab:hover{border-color:var(--gold);background:rgba(255,255,255,.85);transform:translateY(-2px)}
-.tab h3{
+.craft-map .stop{
+  position:absolute;
+  left:var(--x);top:var(--y);
+  transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:flex-start;gap:6px;
+  padding:14px 20px;
+  border-radius:14px;
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(213,223,233,.7);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  min-width:180px;max-width:280px;
+  cursor:pointer;
+  text-align:left;
+  transition:all .35s var(--ease);
+  z-index:2;
+}
+.craft-map .stop:hover, .craft-map .stop:focus-visible{
+  background:rgba(255,255,255,.95);
+  border-color:var(--gold);
+  box-shadow:0 20px 40px -20px rgba(196,162,101,.35);
+  transform:translate(-50%,-50%) scale(1.03);
+  z-index:5;
+}
+/* dim the other stops when one is hovered */
+.craft-map:hover .stop{opacity:.5;filter:blur(.4px)}
+.craft-map:hover .stop:hover{opacity:1;filter:none}
+.craft-map .stop-no{
   font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(19px,2.2vw,22px);line-height:1.2;color:var(--ink);
-  margin-bottom:8px;overflow-wrap:break-word;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-deep);font-weight:500;
 }
-.tab h3 em{color:var(--gold-deep)}
-.tab p{font-size:clamp(13.5px,1.35vw,14.5px);color:var(--ink-2);margin:0;max-width:none}
-.craft-closer{
-  margin-top:clamp(24px,3.4vh,32px);
-  font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(17px,1.9vw,20px);color:var(--gold-deep);text-align:center;
-  max-width:44ch;margin-left:auto;margin-right:auto;line-height:1.4;
+.craft-map .stop-title{
+  font-family:var(--f-serif);font-style:italic;font-weight:500;
+  font-size:clamp(17px,1.9vw,20px);line-height:1.2;color:var(--ink);
+}
+.craft-map .stop-body{
+  font-size:clamp(13px,1.3vw,14px);color:var(--ink-2);line-height:1.55;
+  max-height:0;overflow:hidden;opacity:0;
+  margin-top:0;
+  transition:max-height .4s var(--ease),opacity .3s ease,margin-top .3s ease;
+}
+.craft-map .stop:hover .stop-body,
+.craft-map .stop:focus-visible .stop-body{
+  max-height:200px;opacity:1;margin-top:8px;
+}
+/* Tablet: collapse to two-column zig-zag */
+@media (max-width:820px){
+  .craft-map{
+    height:auto;
+    display:flex;flex-direction:column;gap:14px;
+    max-width:none;
+  }
+  .craft-trail{display:none}
+  .craft-map .stop{
+    position:relative;left:auto !important;top:auto !important;
+    transform:none;
+    width:100%;max-width:none;
+  }
+  .craft-map:hover .stop{opacity:1;filter:none}
+  /* on touch devices, always show body */
+  .craft-map .stop-body{max-height:200px;opacity:1;margin-top:8px}
 }
 
 /* works */
@@ -692,7 +748,6 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   .crow{flex-direction:column;align-items:stretch}
   .crow .btnf, .crow .btnl{justify-content:center;width:100%}
   .work{padding:20px}
-  .tab{padding:20px}
   /* smaller nodes on phone */
   .node .lbl-in{font-size:clamp(15px,4vw,20px) !important}
 }
@@ -803,7 +858,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <section class="chamber" id="ch-about">
   <div class="chbg"></div>
   <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
+    <button class="close" data-close aria-label="Back to orbit">Back to orbit</button>
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>About me</div>
       <h2 data-in>About <em>me.</em></h2>
@@ -829,7 +884,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <section class="chamber" id="ch-journey">
   <div class="chbg"></div>
   <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
+    <button class="close" data-close aria-label="Back to orbit">Back to orbit</button>
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>The journey</div>
       <h2 data-in>How I got <em>here.</em></h2>
@@ -871,7 +926,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <section class="chamber" id="ch-belief">
   <div class="chbg"></div>
   <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
+    <button class="close" data-close aria-label="Back to orbit">Back to orbit</button>
     <div class="chscroll belief-body">
       <div class="ch-eyebrow" data-in>The belief</div>
       <h2 data-in>AI ruined the content world.<br><em>Art is how we take it back.</em></h2>
@@ -886,22 +941,68 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <section class="chamber" id="ch-craft">
   <div class="chbg"></div>
   <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
+    <button class="close" data-close aria-label="Back to orbit">Back to orbit</button>
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>The craft</div>
-      <h2 data-in>How I <em>actually work.</em></h2>
-      <p data-in>Not a framework from a book. Just what I run for every client, every time, with three field rules at the end that took me a while to learn.</p>
-      <div class="craft-grid">
-        <div class="tab" data-in><h3>Branding, before we write.</h3><p>Voice, visual language, positioning. Your content identity comes first.</p></div>
-        <div class="tab" data-in><h3>Every channel has a <em>register.</em></h3><p>Educational, entertaining, raw, aspirational. I find yours and write exclusively in it.</p></div>
-        <div class="tab" data-in><h3>Data shapes the story.</h3><p>Deep dive into what your audience actually watches, searches for, and shares.</p></div>
-        <div class="tab" data-in><h3>Find the gaps, <em>fill them.</em></h3><p>Study what's already working in your niche. Spot what everyone is missing. Position to own that lane.</p></div>
-        <div class="tab" data-in><h3><em>Relevant.</em> Timely. Searchable.</h3><p>Not just trending. The topics specific to your audience's intent and stage of awareness.</p></div>
-        <div class="tab" data-in><h3>Hook. Build. <em>Payoff.</em></h3><p>Every line earns its place. Scripts built to hold from the first second to the last.</p></div>
-        <div class="tab" data-in><h3>Half the battle is <em>being found.</em></h3><p>Optimised for search engines and AI answer engines both. Discoverability isn't optional anymore.</p></div>
-        <div class="tab" data-in><h3>The script test.</h3><p>I read it out loud. If I feel the vibe, it's a go. If I'm confused, I hand it to random people and watch how they react. That's the test.</p></div>
-        <div class="tab" data-in><h3>The hook diagnosis.</h3><p>First rule of sales, they can't feel sold. If a hook worked for a creator, don't clone it. Ask yourself, would I stop for this? Honest answer.</p></div>
-        <div class="tab" data-in><h3>The long-form truth.</h3><p>Perfect scripts flop. Weird ones win. The one you think is perfect won't perform. The one you think won't work will break the internet. So, be authentic, stay relevant.</p></div>
+      <h2 data-in>The <em>map.</em></h2>
+      <p data-in>Not a framework from a book. Ten stops I actually walk through, in order, for every project. Hover any stop to see the detail.</p>
+
+      <div class="craft-map" data-in>
+        <svg class="craft-trail" viewBox="0 0 800 1400" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 100 80 Q 400 40 700 140 Q 400 260 100 340 Q 400 420 700 500 Q 400 620 100 700 Q 400 780 700 860 Q 400 980 100 1060 Q 400 1140 700 1220 Q 400 1300 100 1360"
+                fill="none" stroke="var(--gold)" stroke-width="1.4" stroke-dasharray="3 6" opacity=".65"/>
+        </svg>
+
+        <button class="stop" data-in style="--x:8%;--y:2%;">
+          <span class="stop-no">01</span>
+          <span class="stop-title">Branding, before we write</span>
+          <span class="stop-body">Voice, visual language, positioning. Your content identity comes first.</span>
+        </button>
+        <button class="stop" data-in style="--x:74%;--y:10%;">
+          <span class="stop-no">02</span>
+          <span class="stop-title">Every channel has a register</span>
+          <span class="stop-body">Educational, entertaining, raw, aspirational. I find yours and write exclusively in it.</span>
+        </button>
+        <button class="stop" data-in style="--x:6%;--y:22%;">
+          <span class="stop-no">03</span>
+          <span class="stop-title">Data shapes the story</span>
+          <span class="stop-body">Deep dive into what your audience actually watches, searches for, and shares.</span>
+        </button>
+        <button class="stop" data-in style="--x:74%;--y:34%;">
+          <span class="stop-no">04</span>
+          <span class="stop-title">Find the gaps, fill them</span>
+          <span class="stop-body">Study what's already working in your niche. Spot what everyone is missing. Own the lane.</span>
+        </button>
+        <button class="stop" data-in style="--x:6%;--y:47%;">
+          <span class="stop-no">05</span>
+          <span class="stop-title">Relevant. Timely. Searchable</span>
+          <span class="stop-body">Not just trending. Topics specific to your audience's intent and stage of awareness.</span>
+        </button>
+        <button class="stop" data-in style="--x:74%;--y:58%;">
+          <span class="stop-no">06</span>
+          <span class="stop-title">Hook. Build. Payoff</span>
+          <span class="stop-body">Every line earns its place. Scripts built to hold from the first second to the last.</span>
+        </button>
+        <button class="stop" data-in style="--x:6%;--y:70%;">
+          <span class="stop-no">07</span>
+          <span class="stop-title">Half the battle is being found</span>
+          <span class="stop-body">Optimised for search engines and AI answer engines both. Discoverability isn't optional.</span>
+        </button>
+        <button class="stop" data-in style="--x:74%;--y:82%;">
+          <span class="stop-no">08</span>
+          <span class="stop-title">The script test</span>
+          <span class="stop-body">I read it aloud. If I feel the vibe, it's a go. If I'm confused, I hand it to random people and watch them react.</span>
+        </button>
+        <button class="stop" data-in style="--x:6%;--y:93%;">
+          <span class="stop-no">09</span>
+          <span class="stop-title">The hook diagnosis</span>
+          <span class="stop-body">First rule of sales, they can't feel sold. Would I stop for this? Answer honestly.</span>
+        </button>
+        <button class="stop" data-in style="--x:74%;--y:97%;">
+          <span class="stop-no">10</span>
+          <span class="stop-title">The long-form truth</span>
+          <span class="stop-body">Perfect scripts flop. Weird ones win. Be authentic, stay relevant.</span>
+        </button>
       </div>
     </div>
   </div>
@@ -911,7 +1012,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <section class="chamber" id="ch-works">
   <div class="chbg"></div>
   <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
+    <button class="close" data-close aria-label="Back to orbit">Back to orbit</button>
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>Selected works, 700M+ views</div>
       <h2 data-in>Selected <em>works.</em></h2>
@@ -971,46 +1072,11 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   </div>
 </section>
 
-<!-- GALLERY -->
-<section class="chamber" id="ch-gallery">
-  <div class="chbg"></div>
-  <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
-    <div class="chscroll">
-      <div class="ch-eyebrow" data-in>Growth gallery</div>
-      <h2 data-in>Growth <em>gallery.</em></h2>
-      <div class="gal-hw" data-in><b>Motivation Corner</b> on Instagram. Analytics from a page I built and managed.</div>
-      <div class="gal-grid">
-        <div class="gal-item" data-in>
-          <div class="lbl">Followers · 30 days</div>
-          <div class="val">231,616</div>
-          <div class="delta">▲ +56.9% vs Jan 21</div>
-          <span class="note">Growth over a single month. Cold audience to warm following.</span>
-        </div>
-        <div class="gal-item" data-in>
-          <div class="lbl">Accounts reached · 30 days</div>
-          <div class="val">58,992,141</div>
-          <div class="delta">▲ +36.1% non followers</div>
-          <span class="note">76.7K followers, +100%. And 58.9M non followers reached.</span>
-        </div>
-        <div class="gal-item" data-in>
-          <div class="lbl">Impressions · 30 days</div>
-          <div class="val">79,487,823</div>
-          <div class="delta">▲ +21.1%</div>
-          <span class="note">Reels drove around 59M of these. Format wins.</span>
-        </div>
-      </div>
-      <p data-in style="margin-top:30px;text-align:center;font-family:var(--f-serif);font-style:italic;font-size:clamp(18px,2.2vw,22px);color:var(--ink);max-width:36ch;margin-left:auto;margin-right:auto">"Your free content should be so good that people feel stupid for not buying from you."</p>
-      <p data-in style="text-align:center;font-size:clamp(10px,1.05vw,11px);letter-spacing:.22em;text-transform:uppercase;color:var(--whisper);margin-top:12px"><b style="color:var(--gold-deep)">Alex Hormozi</b> · $100M Offers</p>
-    </div>
-  </div>
-</section>
-
 <!-- PROJECTS -->
 <section class="chamber" id="ch-projects">
   <div class="chbg"></div>
   <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
+    <button class="close" data-close aria-label="Back to orbit">Back to orbit</button>
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>The side projects</div>
       <h2 data-in>Things I'm <em>building.</em></h2>
@@ -1041,7 +1107,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <section class="chamber" id="ch-ambition">
   <div class="chbg"></div>
   <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
+    <button class="close" data-close aria-label="Back to orbit">Back to orbit</button>
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>The ambition</div>
       <h2 data-in>Where this <em>is going.</em></h2>
@@ -1063,34 +1129,6 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   </div>
 </section>
 
-<!-- CONTACT -->
-<section class="chamber" id="ch-contact">
-  <div class="chbg"></div>
-  <div class="chcard">
-    <button class="close" data-close aria-label="Return">×</button>
-    <div class="chscroll">
-      <div class="ch-eyebrow" data-in>The reply</div>
-      <span class="cbadge" data-in><i></i>I only take on 3 projects at a time</span>
-      <h2 data-in>Your 1st script, <em>free.</em></h2>
-      <p data-in>Give me a topic and the tone of your channel. I'll deliver a research backed script that proves my craft.</p>
-      <p data-in style="font-family:var(--f-serif);font-style:italic;color:var(--gold-deep);font-size:clamp(17px,1.9vw,19px)">Because anything can be written beautifully when it's built on proper research.</p>
-      <div class="csteps">
-        <div class="cstep" data-in><span class="no">01.</span><p>Share your channel or brand and niche.</p></div>
-        <div class="cstep" data-in><span class="no">02.</span><p>Tell me the tone, educational, entertaining, motivational.</p></div>
-        <div class="cstep" data-in><span class="no">03.</span><p>Pick a topic, or let me suggest one.</p></div>
-        <div class="cstep" data-in><span class="no">04.</span><p>Receive a fully researched, ready to shoot script.</p></div>
-      </div>
-      <div class="crow" data-in>
-        <a class="btnf" href="mailto:parthtita977@gmail.com?subject=Free%20script%20request%20via%20portfolio">Claim your free script <span class="a">→</span></a>
-        <a class="btnl" href="https://github.com/Parth253" target="_blank" rel="noopener">GitHub ↗</a>
-      </div>
-      <div class="csig">
-        <div class="n" data-in>Parth <em>Tita.</em></div>
-        <div class="m" data-in>Pune, India · works nights · <b>available for challenges 24/7</b></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <script>
 (function(){
@@ -1102,14 +1140,12 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     {id:"about",    title:"About me",         joke:"The safe answer to what do you do, with all the safety removed."},
     {id:"journey",  title:"The journey",      joke:"Every job I quit and the one I definitely shouldn't have. In my own words."},
     {id:"belief",   title:"The belief",       joke:"The AI content industrial complex, briefly diagnosed. Not a fan."},
-    {id:"craft",    title:"The craft",        joke:"How the scripts get made. Includes my genuinely weird QA process."},
+    {id:"craft",    title:"The craft",        joke:"How the scripts get made. Ten steps on a small map."},
     {id:"works",    title:"Selected works",   joke:"700M plus views across the internet. Numbers audited by obsession, not vibes."},
-    {id:"gallery",  title:"Growth gallery",   joke:"Screenshots of a small internet miracle. Zoom in if you like receipts."},
-    {id:"projects", title:"Side projects",     joke:"Two live experiments. One EV strategy, one mental health build. Both stubborn."},
-    {id:"ambition", title:"The ambition",     joke:"Where this goes if I don't get distracted. Big odds. Bigger optimism."},
-    {id:"contact",  title:"The reply",        joke:"Say hi. First script is on the house. Read the fine print, there is none."}
+    {id:"projects", title:"Side projects",    joke:"Two live experiments. One EV strategy, one mental health build. Both stubborn."},
+    {id:"ambition", title:"The ambition",     joke:"Where this goes if I don't get distracted. Big odds. Bigger optimism."}
   ];
-  var DEFAULT_INDEX=2;
+  var DEFAULT_INDEX=1;
 
   var stage=document.getElementById("stage");
   var nodesBox=document.getElementById("nodes");
