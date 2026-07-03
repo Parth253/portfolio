@@ -70,27 +70,52 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 #top{
   position:fixed;top:0;left:0;right:0;z-index:70;
   display:flex;align-items:center;gap:16px;
-  padding:clamp(16px,2.6vw,26px) var(--gutter);
-  pointer-events:none;
+  padding:clamp(14px,2vw,22px) var(--gutter);
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
+  border-bottom:1px solid rgba(213,223,233,.4);
+  transition:padding .5s var(--ease),background .5s ease;
+}
+#top.orbit-mode{
+  padding:clamp(18px,2.4vw,28px) var(--gutter);
+  background:rgba(255,255,255,.7);
 }
 .brand{
   font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(17px,2vw,20px);color:var(--ink);
+  font-size:clamp(19px,2.2vw,22px);color:var(--ink);
   pointer-events:auto;flex-shrink:0;
   padding:0;cursor:pointer;
-  transition:opacity .3s ease;
+  transition:font-size .5s var(--ease),opacity .3s ease;
+  letter-spacing:-.005em;
+}
+#top.orbit-mode .brand{
+  font-size:clamp(22px,2.8vw,30px);
 }
 .brand:hover{opacity:.7}
 .brand em{color:var(--gold-deep)}
 .tspacer{flex:1;min-width:0}
-.tmeta{
+.tnav{
   pointer-events:auto;
-  font-size:clamp(9.5px,1vw,11px);letter-spacing:.22em;text-transform:uppercase;color:var(--whisper);
-  display:flex;align-items:center;gap:14px;
-  flex-shrink:0;text-align:right;
+  display:flex;align-items:center;
+  gap:clamp(18px,2.4vw,28px);
+  flex-shrink:0;
 }
-.tmeta b{color:var(--gold-deep);font-weight:500}
-.tmeta .divider{opacity:.5}
+.tnav a{
+  font-size:clamp(11px,1.15vw,12.5px);letter-spacing:.18em;text-transform:uppercase;color:var(--ink);
+  font-weight:500;
+  position:relative;
+  transition:color .3s ease;
+  white-space:nowrap;
+}
+.tnav a:hover{color:var(--gold-deep)}
+.tnav a::after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;
+  background:var(--gold-deep);transform:scaleX(0);transform-origin:right;
+  transition:transform .3s var(--ease);
+}
+.tnav a:hover::after{transform:scaleX(1);transform-origin:left}
+/* legacy classes hidden */
+.tmeta{display:none}
 
 /* intro */
 #intro{
@@ -103,22 +128,22 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 #intro.gone{opacity:0;pointer-events:none}
 .iwrap{
   position:relative;
-  max-width:min(760px, 92vw);
+  max-width:min(1080px, 92vw);
   width:100%;text-align:center;z-index:5;
   margin:auto;
 }
 .icloud{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:min(900px, 95vw);height:min(640px, 82vh);border-radius:50%;
-  background:radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.9), rgba(255,255,255,.5) 45%, transparent 72%);
+  width:min(1100px, 96vw);height:min(720px, 88vh);border-radius:50%;
+  background:radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.85), rgba(255,255,255,.45) 45%, transparent 72%);
   filter:blur(30px);pointer-events:none;z-index:-1;
 }
 .icol-left, .icol-right{display:contents}
 .ieyebrow{display:none}
-/* h1: Hi, I'm Parth. — forced single line by clamped size */
+/* h1: Hi, I'm Parth. — bigger, forced single line */
 .ihi{
   font-family:var(--f-serif);font-weight:500;
-  font-size:clamp(38px,6vw,72px);line-height:1.05;color:var(--ink);letter-spacing:-.01em;
+  font-size:clamp(42px,7.4vw,96px);line-height:1.02;color:var(--ink);letter-spacing:-.015em;
   opacity:0;transform:translateY(20px);transition:all 1s ease .1s;
   max-width:100%;
   white-space:nowrap;
@@ -143,28 +168,27 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 /* h3: Obsessed with... */
 .iobs{
   font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(18px,2.2vw,26px);line-height:1.35;color:var(--ink-2);letter-spacing:-.005em;
-  margin-top:clamp(12px,2vh,20px);
-  max-width:34ch;margin-left:auto;margin-right:auto;
+  font-size:clamp(20px,2.5vw,30px);line-height:1.35;color:var(--ink-2);letter-spacing:-.005em;
+  margin-top:clamp(14px,2.2vh,22px);
+  max-width:44ch;margin-left:auto;margin-right:auto;
   opacity:0;transform:translateY(20px);transition:all 1s ease .18s;
   position:relative;
-  padding-bottom:clamp(22px,3.4vh,32px);
+  padding-bottom:clamp(24px,3.6vh,36px);
 }
-/* Divider ornament under the heading */
 .iobs::after{
   content:"";
   position:absolute;left:50%;bottom:0;transform:translateX(-50%);
-  width:clamp(80px,10vw,120px);height:1px;
+  width:clamp(100px,12vw,160px);height:1px;
   background:linear-gradient(90deg,transparent 0%,var(--hair) 20%,var(--gold-deep) 50%,var(--hair) 80%,transparent 100%);
 }
 .iwhat{
-  margin-top:clamp(20px,3vh,28px);
-  font-size:clamp(14px,1.4vw,16px);color:var(--ink-2);
-  max-width:48ch;margin-left:auto;margin-right:auto;
-  line-height:1.65;
+  margin-top:clamp(22px,3vh,30px);
+  font-size:clamp(15px,1.55vw,18px);color:var(--ink-2);
+  max-width:60ch;margin-left:auto;margin-right:auto;
+  line-height:1.7;
   opacity:0;transform:translateY(20px);transition:all 1s ease .28s;
   position:relative;
-  padding-bottom:clamp(22px,3.4vh,32px);
+  padding-bottom:clamp(24px,3.6vh,36px);
 }
 .iwhat::after{
   content:"❋";
@@ -176,10 +200,10 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 .iwhat b{color:var(--ink);font-weight:500}
 .iquote{
   margin:clamp(6px,1vh,10px) auto 0;
-  max-width:min(38ch, 92%);
+  max-width:min(52ch, 96%);
   padding:0 clamp(8px,2vw,20px);position:relative;
   font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(15px,1.6vw,18px);line-height:1.45;color:var(--ink-2);
+  font-size:clamp(16px,1.85vw,22px);line-height:1.45;color:var(--ink-2);
   opacity:0;transform:translateY(20px);transition:all 1s ease .38s;
 }
 .iquote::before,.iquote::after{content:"";position:absolute;height:1px;width:clamp(20px,3vw,36px);background:var(--hair);top:50%}
@@ -652,9 +676,9 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     --safe-top:76px;
     --safe-bot:60px;
   }
-  #top{padding:14px 16px;gap:10px}
-  .tmeta{font-size:9px;gap:8px;letter-spacing:.14em}
-  .tmeta .divider{display:none}
+  #top{padding:12px 16px;gap:10px}
+  .tnav{gap:14px}
+  .tnav a{font-size:10.5px;letter-spacing:.12em}
   .iquote::before,.iquote::after{display:none}
   .stage{aspect-ratio:1.4/1.15}
   .brief{bottom:-10px}
@@ -724,7 +748,11 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <header id="top">
   <button class="brand" id="brandBtn" aria-label="Back to home">Parth <em>Tita.</em></button>
   <span class="tspacer"></span>
-  <span class="tmeta"><span id="topPlace">at the entrance</span> <span class="divider">·</span> <b>700M+</b> views</span>
+  <nav class="tnav">
+    <a href="https://www.linkedin.com/in/parth-tita-58123b248/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://drive.google.com/file/d/1A9IhKJvlpOe6zFRejS5wNA_es2Tz-P3c/view" target="_blank" rel="noopener">Resume</a>
+    <a href="mailto:parthtita977@gmail.com">Mail</a>
+  </nav>
 </header>
 
 <section id="intro">
@@ -1051,11 +1079,8 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       </div>
       <div class="crow" data-in>
         <a class="btnf" href="mailto:parthtita977@gmail.com?subject=Free%20script%20request%20via%20portfolio">Claim your free script <span class="a">→</span></a>
-        <a class="btnl" href="https://drive.google.com/file/d/1A9IhKJvlpOe6zFRejS5wNA_es2Tz-P3c/view" target="_blank" rel="noopener">Resume ↗</a>
-        <a class="btnl" href="https://www.linkedin.com/in/parth-tita-58123b248/" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a class="btnl" href="https://github.com/Parth253" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
-      <span class="cmail" data-in>or reach me at <a href="mailto:parthtita977@gmail.com">parthtita977@gmail.com</a></span>
       <div class="csig">
         <div class="n" data-in>Parth <em>Tita.</em></div>
         <div class="m" data-in>Pune, India · works nights · <b>available for challenges 24/7</b></div>
@@ -1088,7 +1113,12 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   var briefTitle=document.getElementById("briefTitle");
   var briefJoke=document.getElementById("briefJoke");
   var briefContent=document.getElementById("briefContent");
-  var topPlace=document.getElementById("topPlace");
+  var topBar=document.getElementById("top");
+  function setMode(mode){
+    if(!topBar) return;
+    if(mode === "orbit") topBar.classList.add("orbit-mode");
+    else topBar.classList.remove("orbit-mode");
+  }
 
   var CX=500, CY=500;
   var R_CENTER=380;
@@ -1245,7 +1275,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       });
       setTimeout(function(){
         document.getElementById("orbit").classList.add("show");
-        topPlace.textContent = "in orbit";
+        setMode("orbit");
         updateNodes();
       }, 400);
       setTimeout(function(){
@@ -1270,7 +1300,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       intro.classList.remove("gone");
       iwrap.classList.remove("show");
       setTimeout(function(){ iwrap.classList.add("show"); }, 100);
-      topPlace.textContent = "at the entrance";
+      setMode("entrance");
       // reset focus to default chapter
       focused = DEFAULT_INDEX;
       updateBrief(CHAPTERS[focused]);
@@ -1334,7 +1364,6 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     if(!el) return;
     el.classList.add("open");
     el.querySelector(".chscroll").scrollTop=0;
-    topPlace.textContent = CHAPTERS[focused].title.toLowerCase();
     var ins=el.querySelectorAll("[data-in]");
     ins.forEach(function(x){x.classList.remove("on");});
     ins.forEach(function(x,i){setTimeout(function(){x.classList.add("on");}, 100+i*40);});
@@ -1343,7 +1372,6 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     var open=document.querySelector(".chamber.open");
     if(!open) return;
     open.classList.remove("open");
-    topPlace.textContent = "in orbit";
   }
   document.querySelectorAll("[data-close]").forEach(function(b){b.addEventListener("click", closeChamber);});
   document.querySelectorAll(".chbg").forEach(function(b){b.addEventListener("click", closeChamber);});
