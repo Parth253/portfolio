@@ -77,7 +77,10 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   font-family:var(--f-serif);font-style:italic;
   font-size:clamp(17px,2vw,20px);color:var(--ink);
   pointer-events:auto;flex-shrink:0;
+  padding:0;cursor:pointer;
+  transition:opacity .3s ease;
 }
+.brand:hover{opacity:.7}
 .brand em{color:var(--gold-deep)}
 .tspacer{flex:1;min-width:0}
 .tmeta{
@@ -125,16 +128,17 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 .ihi .parth{
   font-family:'Fraunces','EB Garamond',Georgia,serif;
   font-style:italic;font-weight:800;
-  color:var(--gold-deep);
+  color:#8B5A2E;
   animation:parthCycle 8s ease-in-out infinite;
   letter-spacing:-.02em;
+  text-shadow:0 2px 20px rgba(255,255,255,.4);
 }
 @keyframes parthCycle{
-  0%   {color:#A98849}
-  25%  {color:#C97A54}
-  50%  {color:#5A8199}
-  75%  {color:#8A9668}
-  100% {color:#A98849}
+  0%   {color:#8B5A2E}    /* deep bronze */
+  25%  {color:#A0341C}    /* oxblood */
+  50%  {color:#4A3B7A}    /* deep plum */
+  75%  {color:#2E5F4A}    /* forest green */
+  100% {color:#8B5A2E}    /* back to bronze */
 }
 /* h3: Obsessed with... */
 .iobs{
@@ -143,6 +147,15 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   margin-top:clamp(12px,2vh,20px);
   max-width:34ch;margin-left:auto;margin-right:auto;
   opacity:0;transform:translateY(20px);transition:all 1s ease .18s;
+  position:relative;
+  padding-bottom:clamp(22px,3.4vh,32px);
+}
+/* Divider ornament under the heading */
+.iobs::after{
+  content:"";
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:clamp(80px,10vw,120px);height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--hair) 20%,var(--gold-deep) 50%,var(--hair) 80%,transparent 100%);
 }
 .iwhat{
   margin-top:clamp(20px,3vh,28px);
@@ -150,10 +163,19 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   max-width:48ch;margin-left:auto;margin-right:auto;
   line-height:1.65;
   opacity:0;transform:translateY(20px);transition:all 1s ease .28s;
+  position:relative;
+  padding-bottom:clamp(22px,3.4vh,32px);
+}
+.iwhat::after{
+  content:"❋";
+  position:absolute;left:50%;bottom:2px;transform:translateX(-50%);
+  color:var(--gold-deep);font-size:14px;line-height:1;
+  background:transparent;padding:0 8px;
+  font-family:var(--f-serif);
 }
 .iwhat b{color:var(--ink);font-weight:500}
 .iquote{
-  margin:clamp(22px,3.4vh,34px) auto 0;
+  margin:clamp(6px,1vh,10px) auto 0;
   max-width:min(38ch, 92%);
   padding:0 clamp(8px,2vw,20px);position:relative;
   font-family:var(--f-serif);font-style:italic;font-weight:400;
@@ -166,11 +188,19 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 .iattr{
   margin-top:10px;font-size:clamp(9.5px,1vw,10.5px);letter-spacing:.22em;text-transform:uppercase;color:var(--whisper);
   opacity:0;transition:opacity 1s ease .48s;
+  padding-bottom:clamp(22px,3.4vh,32px);
+  position:relative;
+}
+.iattr::after{
+  content:"";
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:clamp(80px,10vw,120px);height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--hair) 20%,var(--gold-deep) 50%,var(--hair) 80%,transparent 100%);
 }
 .iattr b{color:var(--ink);font-weight:500}
 .icta{
   display:inline-flex;align-items:center;gap:12px;
-  margin-top:clamp(22px,3.4vh,32px);
+  margin-top:clamp(16px,2.6vh,26px);
   max-width:100%;
   position:relative;z-index:5;
   font-size:clamp(10.5px,1.05vw,12px);letter-spacing:.24em;text-transform:uppercase;color:var(--ink);
@@ -186,12 +216,19 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 .iwarn{
   margin:clamp(20px,3vh,30px) auto 0;
   max-width:min(50ch, 94%);
-  padding:0 clamp(8px,2vw,16px);
+  padding:clamp(20px,3vh,28px) clamp(8px,2vw,16px) 0;
   font-family:var(--f-serif);font-style:italic;font-weight:400;
   font-size:clamp(12.5px,1.25vw,14px);line-height:1.55;
   color:var(--gold-deep);
   text-align:center;
   opacity:0;transform:translateY(12px);transition:all 1s ease .7s;
+  position:relative;
+}
+.iwarn::before{
+  content:"";
+  position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:clamp(40px,5vw,60px);height:1px;
+  background:var(--hair);
 }
 .iwarn b{color:var(--ink);font-style:normal;font-weight:500}
 .iwrap.show .ieyebrow,.iwrap.show .ihi,.iwrap.show .iobs,.iwrap.show .iwhat,.iwrap.show .iquote,.iwrap.show .iattr,.iwrap.show .iwarn,.iwrap.show .icta{opacity:1;transform:none}
@@ -685,7 +722,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <div id="grain" aria-hidden="true"></div>
 
 <header id="top">
-  <span class="brand">Parth <em>Tita.</em></span>
+  <button class="brand" id="brandBtn" aria-label="Back to home">Parth <em>Tita.</em></button>
   <span class="tspacer"></span>
   <span class="tmeta"><span id="topPlace">at the entrance</span> <span class="divider">·</span> <b>700M+</b> views</span>
 </header>
@@ -1182,6 +1219,27 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     }, 550);
   }
   enterBtn.addEventListener("click", shatterAndAssemble);
+
+  // Brand button returns to home screen
+  var brandBtn = document.getElementById("brandBtn");
+  if(brandBtn){
+    brandBtn.addEventListener("click", function(){
+      // close any open chamber
+      var open = document.querySelector(".chamber.open");
+      if(open) open.classList.remove("open");
+      // hide orbit
+      var orbitEl = document.getElementById("orbit");
+      orbitEl.classList.remove("show");
+      // show intro
+      intro.classList.remove("gone");
+      iwrap.classList.remove("show");
+      setTimeout(function(){ iwrap.classList.add("show"); }, 100);
+      topPlace.textContent = "at the entrance";
+      // reset focus to default chapter
+      focused = DEFAULT_INDEX;
+      updateBrief(CHAPTERS[focused]);
+    });
+  }
 
   var wheelLock=false;
   window.addEventListener("wheel", function(e){
