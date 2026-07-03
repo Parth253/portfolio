@@ -9,7 +9,7 @@
 <meta property="og:description" content="700M+ views. Human written. Enter the orbit.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 :root{
   --sky-hi:#EAF3FA;
@@ -25,7 +25,7 @@
   --gold-deep:#A98849;
   --sun:#F4C97A;
   --f-sans:'Inter','Söhne','Helvetica Neue',Arial,sans-serif;
-  --f-serif:'Instrument Serif',Georgia,serif;
+  --f-serif:'EB Garamond',Georgia,serif;
   --ease:cubic-bezier(.22,.8,.24,1);
   /* responsive gutter that scales with viewport */
   --gutter:clamp(20px, 4vw, 56px);
@@ -111,65 +111,92 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   filter:blur(28px);pointer-events:none;z-index:-1;
 }
 .ieyebrow{
-  font-size:clamp(10px,1.1vw,11px);letter-spacing:.3em;text-transform:uppercase;color:var(--whisper);
-  margin-bottom:clamp(22px,3.6vh,34px);
+  font-size:clamp(10px,1.05vw,11px);letter-spacing:.3em;text-transform:uppercase;color:var(--whisper);
+  margin-bottom:clamp(18px,3vh,28px);
   opacity:0;transform:translateY(10px);transition:all 1s ease;
 }
+/* h1: Hi, I'm Parth. */
 .ihi{
-  font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(34px,7vw,76px);line-height:1.08;color:var(--ink);letter-spacing:-.015em;
+  font-family:var(--f-serif);font-weight:500;
+  font-size:clamp(38px,6vw,68px);line-height:1.05;color:var(--ink);letter-spacing:-.01em;
   opacity:0;transform:translateY(20px);transition:all 1s ease .1s;
-  max-width:20ch;margin-left:auto;margin-right:auto;
-  overflow-wrap:break-word;word-wrap:break-word;
+  max-width:16ch;margin-left:auto;margin-right:auto;
+  overflow-wrap:break-word;
 }
-.ihi em{color:var(--gold-deep)}
+/* Parth: continuous soft color cycle */
+.ihi .parth{
+  font-style:italic;font-weight:500;
+  color:var(--gold-deep);
+  animation:parthCycle 8s ease-in-out infinite;
+}
+@keyframes parthCycle{
+  0%   {color:#A98849}
+  25%  {color:#C97A54}
+  50%  {color:#5A8199}
+  75%  {color:#8A9668}
+  100% {color:#A98849}
+}
+/* h3: Obsessed with... (smaller, subordinate) */
+.iobs{
+  font-family:var(--f-serif);font-style:italic;font-weight:400;
+  font-size:clamp(20px,2.4vw,28px);line-height:1.35;color:var(--ink-2);letter-spacing:-.005em;
+  margin-top:clamp(14px,2vh,20px);
+  max-width:28ch;margin-left:auto;margin-right:auto;
+  opacity:0;transform:translateY(20px);transition:all 1s ease .18s;
+}
 .iwhat{
-  margin-top:clamp(18px,2.6vh,24px);
-  font-size:clamp(14.5px,1.6vw,18px);color:var(--ink-2);
-  max-width:52ch;margin-left:auto;margin-right:auto;
+  margin-top:clamp(20px,3vh,28px);
+  font-size:clamp(14px,1.5vw,17px);color:var(--ink-2);
+  max-width:50ch;margin-left:auto;margin-right:auto;
+  line-height:1.65;
+  opacity:0;transform:translateY(20px);transition:all 1s ease .28s;
 }
 .iwhat b{color:var(--ink);font-weight:500}
-.iwhat, .iquote, .iattr, .iwarn, .icta{opacity:0;transform:translateY(20px)}
-.iwhat{transition:all 1s ease .25s}
 .iquote{
-  margin:clamp(28px,4vh,48px) auto 0;
+  margin:clamp(24px,3.6vh,38px) auto 0;
   max-width:min(38ch, 92%);
   padding:0 clamp(8px,2vw,20px);position:relative;
   font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(17px,2.2vw,24px);line-height:1.4;color:var(--ink);
-  transition:all 1s ease .4s;
+  font-size:clamp(15px,1.7vw,19px);line-height:1.45;color:var(--ink-2);
+  opacity:0;transform:translateY(20px);transition:all 1s ease .38s;
 }
 .iquote::before,.iquote::after{content:"";position:absolute;height:1px;width:clamp(20px,3vw,36px);background:var(--hair);top:50%}
 .iquote::before{left:calc(-1 * clamp(28px,4.5vw,56px))}
 .iquote::after{right:calc(-1 * clamp(28px,4.5vw,56px))}
-.iattr{margin-top:12px;font-size:clamp(10px,1.1vw,11px);letter-spacing:.22em;text-transform:uppercase;color:var(--whisper);transition:opacity 1s ease .5s}
-.iattr b{color:var(--ink);font-weight:500}
-.iwarn{
-  margin:clamp(30px,4.5vh,44px) auto 0;
-  max-width:min(42ch, 92%);
-  padding:clamp(18px,2.8vw,22px) clamp(20px,3vw,26px);
-  background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border:1px solid rgba(213,223,233,.75);border-radius:16px;
-  transition:all 1s ease .55s;
-  text-align:left;
+.iattr{
+  margin-top:10px;font-size:clamp(9.5px,1vw,10.5px);letter-spacing:.22em;text-transform:uppercase;color:var(--whisper);
+  opacity:0;transition:opacity 1s ease .48s;
 }
-.iwarn .lbl{font-size:clamp(9.5px,1vw,10px);letter-spacing:.28em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:8px;display:block}
-.iwarn p{font-size:clamp(13.5px,1.4vw,15px);line-height:1.55;color:var(--ink-2)}
+.iattr b{color:var(--ink);font-weight:500}
+/* Button now sits directly under the quote, before the warning line */
 .icta{
   display:inline-flex;align-items:center;gap:12px;
-  margin-top:clamp(28px,4vh,40px);
+  margin-top:clamp(24px,3.6vh,32px);
   max-width:100%;
   position:relative;z-index:5;
-  font-size:clamp(11px,1.1vw,12px);letter-spacing:.26em;text-transform:uppercase;color:var(--ink);
-  background:rgba(255,255,255,.4);border:1px solid var(--ink);border-radius:100px;
-  padding:clamp(13px,1.6vw,15px) clamp(24px,3vw,30px);
+  font-size:clamp(10.5px,1.05vw,12px);letter-spacing:.24em;text-transform:uppercase;color:var(--ink);
+  background:rgba(255,255,255,.5);border:1px solid var(--ink);border-radius:100px;
+  padding:clamp(12px,1.4vw,14px) clamp(22px,2.8vw,28px);
   transition:all .35s var(--ease);
   white-space:nowrap;
+  opacity:0;transform:translateY(20px);
 }
-.icta.show{opacity:1;transform:none;transition:opacity 1s ease .7s,transform 1s ease .7s,background .35s var(--ease),color .35s var(--ease),letter-spacing .35s var(--ease)}
+.icta.show{opacity:1;transform:none;transition:opacity 1s ease .58s,transform 1s ease .58s,background .35s var(--ease),color .35s var(--ease),letter-spacing .35s var(--ease)}
 .icta:hover{background:var(--ink);color:var(--cloud)}
-.icta .a{font-family:var(--f-serif);font-style:italic;font-size:clamp(16px,1.7vw,18px);letter-spacing:0}
-.iwrap.show .ieyebrow,.iwrap.show .ihi,.iwrap.show .iwhat,.iwrap.show .iquote,.iwrap.show .iattr,.iwrap.show .iwarn,.iwrap.show .icta{opacity:1;transform:none}
+.icta .a{font-family:var(--f-serif);font-style:italic;font-size:clamp(15px,1.5vw,17px);letter-spacing:0}
+/* Warning becomes a single-line note UNDER the button, small, italic, different color */
+.iwarn{
+  margin:clamp(20px,3.2vh,32px) auto 0;
+  max-width:min(52ch, 94%);
+  padding:0 clamp(8px,2vw,16px);
+  font-family:var(--f-serif);font-style:italic;font-weight:400;
+  font-size:clamp(13px,1.35vw,15px);line-height:1.5;
+  color:var(--gold-deep);
+  text-align:center;
+  opacity:0;transform:translateY(12px);transition:all 1s ease .7s;
+}
+.iwarn b{color:var(--ink);font-style:normal;font-weight:500}
+.iwrap.show .ieyebrow,.iwrap.show .ihi,.iwrap.show .iobs,.iwrap.show .iwhat,.iwrap.show .iquote,.iwrap.show .iattr,.iwrap.show .iwarn,.iwrap.show .icta{opacity:1;transform:none}
 
 /* dust */
 #dust{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .3s ease}
@@ -667,19 +694,16 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <section id="intro">
   <div class="iwrap" id="iwrap">
     <div class="icloud" aria-hidden="true"></div>
-    <div class="ieyebrow">Portfolio · 2026</div>
-    <h1 class="ihi">Hi, I'm <em>Parth.</em><br>Obsessed with why people click, stay, and pay.</h1>
+    <h1 class="ihi">Hi, I'm <span class="parth">Parth.</span></h1>
+    <h3 class="iobs">Obsessed with why people click, stay, and pay.</h3>
     <p class="iwhat">GTM and growth by trade, script writer by love. You're about to explore my journey, my thinking, and everything I've come to believe about attention. <b>Take your time.</b></p>
 
     <blockquote class="iquote">Every child is an artist. The problem is how to remain an artist once we grow up.</blockquote>
     <div class="iattr"><b>Pablo Picasso</b></div>
 
-    <aside class="iwarn">
-      <span class="lbl">A quick heads up</span>
-      <p>I'm a pretty random guy. You'll scroll around and probably think, what is this dude actually doing with his life. Honestly, some days I don't fully know either. <b>Bear with me.</b> That's kind of the point.</p>
-    </aside>
+    <button class="icta" id="enterBtn" style="pointer-events:auto">Let's explore <span class="a">→</span></button>
 
-    <button class="icta show" id="enterBtn" style="opacity:1;transform:none">Let's explore <span class="a">→</span></button>
+    <p class="iwarn">Fair warning, I'm a pretty random guy. Some days I don't fully know what I'm doing either. <b>Bear with me,</b> that's kind of the point.</p>
   </div>
 </section>
 
