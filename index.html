@@ -9,7 +9,7 @@
 <meta property="og:description" content="700M+ views. Human written. Enter the orbit.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:ital,wght@0,600;0,700;0,800;1,600;1,700;1,800&display=swap" rel="stylesheet">
 <style>
 :root{
   --sky-hi:#EAF3FA;
@@ -106,28 +106,28 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 }
 .icloud{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:min(780px, 92vw);height:min(600px, 82vh);border-radius:50%;
-  background:radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.95), rgba(255,255,255,.55) 45%, transparent 72%);
-  filter:blur(28px);pointer-events:none;z-index:-1;
+  width:min(900px, 95vw);height:min(640px, 82vh);border-radius:50%;
+  background:radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.9), rgba(255,255,255,.5) 45%, transparent 72%);
+  filter:blur(30px);pointer-events:none;z-index:-1;
 }
-.ieyebrow{
-  font-size:clamp(10px,1.05vw,11px);letter-spacing:.3em;text-transform:uppercase;color:var(--whisper);
-  margin-bottom:clamp(18px,3vh,28px);
-  opacity:0;transform:translateY(10px);transition:all 1s ease;
-}
-/* h1: Hi, I'm Parth. */
+.icol-left, .icol-right{display:contents}
+.ieyebrow{display:none}
+/* h1: Hi, I'm Parth. — forced single line by clamped size */
 .ihi{
   font-family:var(--f-serif);font-weight:500;
-  font-size:clamp(38px,6vw,68px);line-height:1.05;color:var(--ink);letter-spacing:-.01em;
+  font-size:clamp(38px,6vw,72px);line-height:1.05;color:var(--ink);letter-spacing:-.01em;
   opacity:0;transform:translateY(20px);transition:all 1s ease .1s;
-  max-width:16ch;margin-left:auto;margin-right:auto;
-  overflow-wrap:break-word;
+  max-width:100%;
+  white-space:nowrap;
+  overflow:visible;
 }
-/* Parth: continuous soft color cycle */
+/* Parth: Fraunces, heavier weight, continuous color cycle */
 .ihi .parth{
-  font-style:italic;font-weight:500;
+  font-family:'Fraunces','EB Garamond',Georgia,serif;
+  font-style:italic;font-weight:800;
   color:var(--gold-deep);
   animation:parthCycle 8s ease-in-out infinite;
+  letter-spacing:-.02em;
 }
 @keyframes parthCycle{
   0%   {color:#A98849}
@@ -136,28 +136,28 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   75%  {color:#8A9668}
   100% {color:#A98849}
 }
-/* h3: Obsessed with... (smaller, subordinate) */
+/* h3: Obsessed with... */
 .iobs{
   font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(20px,2.4vw,28px);line-height:1.35;color:var(--ink-2);letter-spacing:-.005em;
-  margin-top:clamp(14px,2vh,20px);
-  max-width:28ch;margin-left:auto;margin-right:auto;
+  font-size:clamp(18px,2.2vw,26px);line-height:1.35;color:var(--ink-2);letter-spacing:-.005em;
+  margin-top:clamp(12px,2vh,20px);
+  max-width:34ch;margin-left:auto;margin-right:auto;
   opacity:0;transform:translateY(20px);transition:all 1s ease .18s;
 }
 .iwhat{
   margin-top:clamp(20px,3vh,28px);
-  font-size:clamp(14px,1.5vw,17px);color:var(--ink-2);
-  max-width:50ch;margin-left:auto;margin-right:auto;
+  font-size:clamp(14px,1.4vw,16px);color:var(--ink-2);
+  max-width:48ch;margin-left:auto;margin-right:auto;
   line-height:1.65;
   opacity:0;transform:translateY(20px);transition:all 1s ease .28s;
 }
 .iwhat b{color:var(--ink);font-weight:500}
 .iquote{
-  margin:clamp(24px,3.6vh,38px) auto 0;
+  margin:clamp(22px,3.4vh,34px) auto 0;
   max-width:min(38ch, 92%);
   padding:0 clamp(8px,2vw,20px);position:relative;
   font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(15px,1.7vw,19px);line-height:1.45;color:var(--ink-2);
+  font-size:clamp(15px,1.6vw,18px);line-height:1.45;color:var(--ink-2);
   opacity:0;transform:translateY(20px);transition:all 1s ease .38s;
 }
 .iquote::before,.iquote::after{content:"";position:absolute;height:1px;width:clamp(20px,3vw,36px);background:var(--hair);top:50%}
@@ -168,15 +168,14 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   opacity:0;transition:opacity 1s ease .48s;
 }
 .iattr b{color:var(--ink);font-weight:500}
-/* Button now sits directly under the quote, before the warning line */
 .icta{
   display:inline-flex;align-items:center;gap:12px;
-  margin-top:clamp(24px,3.6vh,32px);
+  margin-top:clamp(22px,3.4vh,32px);
   max-width:100%;
   position:relative;z-index:5;
   font-size:clamp(10.5px,1.05vw,12px);letter-spacing:.24em;text-transform:uppercase;color:var(--ink);
-  background:rgba(255,255,255,.5);border:1px solid var(--ink);border-radius:100px;
-  padding:clamp(12px,1.4vw,14px) clamp(22px,2.8vw,28px);
+  background:rgba(255,255,255,.55);border:1px solid var(--ink);border-radius:100px;
+  padding:clamp(12px,1.4vw,15px) clamp(24px,3vw,30px);
   transition:all .35s var(--ease);
   white-space:nowrap;
   opacity:0;transform:translateY(20px);
@@ -184,13 +183,12 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 .icta.show{opacity:1;transform:none;transition:opacity 1s ease .58s,transform 1s ease .58s,background .35s var(--ease),color .35s var(--ease),letter-spacing .35s var(--ease)}
 .icta:hover{background:var(--ink);color:var(--cloud)}
 .icta .a{font-family:var(--f-serif);font-style:italic;font-size:clamp(15px,1.5vw,17px);letter-spacing:0}
-/* Warning becomes a single-line note UNDER the button, small, italic, different color */
 .iwarn{
-  margin:clamp(20px,3.2vh,32px) auto 0;
-  max-width:min(52ch, 94%);
+  margin:clamp(20px,3vh,30px) auto 0;
+  max-width:min(50ch, 94%);
   padding:0 clamp(8px,2vw,16px);
   font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(13px,1.35vw,15px);line-height:1.5;
+  font-size:clamp(12.5px,1.25vw,14px);line-height:1.55;
   color:var(--gold-deep);
   text-align:center;
   opacity:0;transform:translateY(12px);transition:all 1s ease .7s;
@@ -245,20 +243,21 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   opacity:0;
 }
 .node .lbl-in{
-  font-family:var(--f-serif);font-style:italic;font-weight:400;
-  color:var(--ink);text-align:center;padding:0 14px;line-height:1.1;
+  font-family:var(--f-serif);font-style:italic;font-weight:500;
+  color:var(--ink);text-align:center;padding:0 14px;line-height:1.15;
   opacity:0;transform:translateY(6px);
   transition:opacity .35s ease,transform .35s ease;
   pointer-events:none;
   max-width:88%;
   overflow-wrap:break-word;
+  text-shadow:0 1px 20px rgba(255,255,255,.8);
 }
 .node.center{
   opacity:1;
-  background:rgba(255,255,255,.85);
-  box-shadow:0 30px 60px -20px rgba(196,162,101,.35),0 0 0 8px rgba(255,255,255,.4);
+  background:rgba(255,255,255,.96);
+  box-shadow:0 30px 60px -20px rgba(196,162,101,.4),0 0 0 8px rgba(255,255,255,.5),inset 0 -20px 40px rgba(196,162,101,.08);
 }
-.node.center .lbl-in{opacity:1;transform:none}
+.node.center .lbl-in{opacity:1;transform:none;color:var(--ink)}
 .node.center::before{
   content:"";position:absolute;inset:-14px;border-radius:50%;
   border:1px solid rgba(196,162,101,.35);
@@ -636,7 +635,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 
 /* Small phone */
 @media (max-width:380px){
-  .ihi{font-size:clamp(28px,8vw,36px)}
+  .ihi{font-size:clamp(28px,9vw,38px)}
   .icta{padding:13px 20px;font-size:10.5px;letter-spacing:.22em;gap:8px}
   .icta .a{font-size:15px}
   .brief-title{font-size:20px}
@@ -1060,7 +1059,10 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
         pos = stagePct(CX, CY - R_CENTER);
         size = sizes.center;
         el.classList.add("center");
-        el.querySelector(".lbl-in").textContent = CHAPTERS[i].title;
+        var lbl = el.querySelector(".lbl-in");
+        lbl.textContent = CHAPTERS[i].title;
+        // scale label to circle size so it always reads
+        lbl.style.fontSize = Math.max(20, Math.min(34, sizes.center * 0.14)) + "px";
       } else if(i===focused-1){
         var a = (180 + 40) * Math.PI/180;
         pos = stagePct(CX + Math.cos(a)*R_SIDE, CY + Math.sin(a)*R_SIDE);
