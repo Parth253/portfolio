@@ -375,7 +375,10 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   font-size:clamp(9.5px,1vw,11px);letter-spacing:.22em;text-transform:uppercase;color:var(--whisper);
   display:flex;align-items:center;gap:16px;flex-wrap:wrap;
   max-width:calc(100vw - 2 * var(--gutter));
+  opacity:0;pointer-events:none;
+  transition:opacity .6s ease .3s;
 }
+#top.orbit-mode ~ .hint{opacity:1}
 .hint .k{
   display:inline-flex;align-items:center;justify-content:center;
   min-width:26px;height:22px;padding:0 6px;
