@@ -9,7 +9,7 @@
 <meta property="og:description" content="700M+ views. Human written. Enter the orbit.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:ital,wght@0,600;0,700;0,800;1,600;1,700;1,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:ital,wght@0,600;0,700;0,800;1,600;1,700;1,800&family=Homemade+Apple&family=Kalam:wght@300;400;700&family=Caveat+Brush&display=swap" rel="stylesheet">
 <style>
 :root{
   --sky-hi:#EAF3FA;
@@ -26,6 +26,15 @@
   --sun:#F4C97A;
   --f-sans:'Inter','Söhne','Helvetica Neue',Arial,sans-serif;
   --f-serif:'EB Garamond',Georgia,serif;
+  --f-hand:'Homemade Apple',cursive;
+  --f-diary:'Kalam','Homemade Apple',cursive;
+  --f-diary-title:'Caveat Brush','Kalam',cursive;
+  --paper:#F6EDD8;
+  --paper-shade:#EFE2C5;
+  --paper-line:rgba(196,162,101,.28);
+  --diary-ink:#2E2416;
+  --diary-red:#B84F3A;
+  --diary-teal:#3D6B6B;
   --ease:cubic-bezier(.22,.8,.24,1);
   /* responsive gutter that scales with viewport */
   --gutter:clamp(20px, 4vw, 56px);
@@ -62,9 +71,19 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 }
 #clouds{position:fixed;inset:0;z-index:1;pointer-events:none;will-change:transform}
 #grain{
-  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.35;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.55;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
 }
+/* Cursor-following drifting cloud */
+#drift-cloud{
+  position:fixed;top:0;left:0;width:520px;height:340px;z-index:2;
+  pointer-events:none;opacity:0;
+  transition:opacity 2s ease 1.2s;
+  will-change:transform;
+  transform:translate(-50%,-50%);
+}
+#drift-cloud.on{opacity:.55}
+#drift-cloud svg{width:100%;height:100%}
 
 /* top bar */
 #top{
@@ -72,35 +91,65 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   display:flex;align-items:center;gap:16px;
   padding:clamp(14px,2vw,22px) var(--gutter);
   background:linear-gradient(180deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.15) 70%,transparent 100%);
-  transition:padding .5s var(--ease),background .5s ease;
+  transition:padding .5s var(--ease),background .5s ease,opacity .4s ease,transform .4s ease;
+}
+#top.chamber-open{
+  opacity:0;
+  transform:translateY(-100%);
+  pointer-events:none;
 }
 #top.orbit-mode{
   padding:clamp(18px,2.4vw,28px) var(--gutter);
   background:linear-gradient(180deg,rgba(255,255,255,.6) 0%,rgba(255,255,255,.2) 70%,transparent 100%);
 }
 .brand{
-  font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(19px,2.2vw,22px);color:var(--ink);
   pointer-events:auto;flex-shrink:0;
   padding:0;cursor:pointer;
-  transition:font-size .5s var(--ease),opacity .3s ease;
-  letter-spacing:-.005em;
+  color:var(--diary-ink);
+  font-family:var(--f-diary-title);
+  font-size:clamp(24px,2.8vw,32px);letter-spacing:0;text-transform:none;font-weight:400;
+  position:relative;
+  transition:color .3s ease,font-size .5s var(--ease);
+  line-height:1;
+  display:inline-flex;
 }
 #top.orbit-mode .brand{
-  font-size:clamp(22px,2.8vw,30px);
+  font-size:clamp(28px,3.2vw,38px);
 }
-.brand:hover{opacity:.7}
-.brand em{color:var(--gold-deep)}
+.brand:hover{color:var(--diary-red)}
+.brand .bl{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(-8px) rotate(-8deg);
+  filter:blur(3px);
+  animation:brandLetterIn .55s cubic-bezier(.2,.7,.3,1) forwards;
+}
+.brand .bl:nth-child(1){animation-delay:.15s}
+.brand .bl:nth-child(2){animation-delay:.24s}
+.brand .bl:nth-child(3){animation-delay:.33s}
+.brand .bl:nth-child(4){animation-delay:.42s}
+.brand .bl:nth-child(5){animation-delay:.51s}
+.brand .bl:nth-child(6){animation-delay:.6s}
+.brand .bl:nth-child(7){animation-delay:.69s}
+.brand .bl:nth-child(8){animation-delay:.78s}
+.brand .bl:nth-child(9){animation-delay:.87s}
+.brand .bl:nth-child(10){animation-delay:.96s}
+@keyframes brandLetterIn{
+  0%{opacity:0;transform:translateY(-8px) rotate(-8deg);filter:blur(3px)}
+  60%{opacity:1;transform:translateY(2px) rotate(2deg);filter:blur(0)}
+  100%{opacity:1;transform:translateY(0) rotate(0deg);filter:blur(0)}
+}
 .tspacer{flex:1;min-width:0}
 .tnav{
   pointer-events:auto;
   display:flex;align-items:center;
-  gap:clamp(20px,2.7vw,32px);
+  gap:clamp(23px,3.1vw,37px);
   flex-shrink:0;
 }
 .tnav a{
-  font-size:clamp(11px,1.15vw,12.5px);letter-spacing:.18em;text-transform:uppercase;color:var(--ink);
-  font-weight:500;
+  font-family:var(--f-sans);
+  font-size:clamp(11px,1.15vw,12.5px);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);
+  font-weight:600;
   position:relative;
   transition:color .3s ease;
   white-space:nowrap;
@@ -112,7 +161,6 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   transition:transform .3s var(--ease);
 }
 .tnav a:hover::after{transform:scaleX(1);transform-origin:left}
-/* legacy classes hidden */
 .tmeta{display:none}
 
 /* intro */
@@ -138,30 +186,66 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 }
 .icol-left, .icol-right{display:contents}
 .ieyebrow{display:none}
-/* h1: Hi, I'm Parth. — bigger, forced single line */
+/* h1: Hi, I'm Parth. — Hi Im handwritten, Parth stays display Fraunces */
 .ihi{
-  font-family:var(--f-serif);font-weight:500;
-  font-size:clamp(42px,7.4vw,96px);line-height:1.02;color:var(--ink);letter-spacing:-.015em;
+  font-family:var(--f-diary-title);font-weight:400;
+  font-size:clamp(42px,7.4vw,96px);line-height:1.02;color:var(--ink);letter-spacing:0;
   opacity:0;transform:translateY(20px);transition:all 1s ease .1s;
   max-width:100%;
   white-space:nowrap;
   overflow:visible;
 }
-/* Parth: Fraunces, heavier weight, continuous color cycle */
+/* Parth: solid deep bronze with a subtle sheen sweep */
 .ihi .parth{
   font-family:'Fraunces','EB Garamond',Georgia,serif;
   font-style:italic;font-weight:800;
-  color:#8B5A2E;
-  animation:parthCycle 8s ease-in-out infinite;
   letter-spacing:-.02em;
-  text-shadow:0 2px 20px rgba(255,255,255,.4);
+  display:inline-block;
+  color:#8B5A2E;
+  text-shadow:0 2px 20px rgba(255,255,255,.3);
+  position:relative;
 }
-@keyframes parthCycle{
-  0%   {color:#8B5A2E}    /* deep bronze */
-  25%  {color:#A0341C}    /* oxblood */
-  50%  {color:#4A3B7A}    /* deep plum */
-  75%  {color:#2E5F4A}    /* forest green */
-  100% {color:#8B5A2E}    /* back to bronze */
+/* Sheen sweep sits on top of the letters, adds a subtle gleam every few seconds */
+.ihi .parth::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(100deg,
+    transparent 0%,
+    transparent 42%,
+    rgba(255,230,180,.55) 50%,
+    transparent 58%,
+    transparent 100%
+  );
+  background-size:250% 100%;
+  background-position:100% 0;
+  animation:parthSheen 5.5s ease-in-out 2s infinite;
+  pointer-events:none;
+  mix-blend-mode:overlay;
+}
+@keyframes parthSheen{
+  0%{background-position:100% 0}
+  55%{background-position:-30% 0}
+  100%{background-position:-30% 0}
+}
+/* Letter-by-letter reveal on load */
+.ihi .parth .lt{
+  display:inline-block;
+  color:#8B5A2E;
+  opacity:0;
+  transform:translateY(20px) scale(.85);
+  filter:blur(4px);
+  animation:letterShimmer .9s cubic-bezier(.2,.7,.3,1) forwards;
+}
+.ihi .parth .lt:nth-child(1){animation-delay:.5s}
+.ihi .parth .lt:nth-child(2){animation-delay:.65s}
+.ihi .parth .lt:nth-child(3){animation-delay:.8s}
+.ihi .parth .lt:nth-child(4){animation-delay:.95s}
+.ihi .parth .lt:nth-child(5){animation-delay:1.1s}
+.ihi .parth .lt:nth-child(6){animation-delay:1.25s}
+@keyframes letterShimmer{
+  0%{opacity:0;transform:translateY(20px) scale(.85);filter:blur(4px)}
+  60%{opacity:1;transform:translateY(-4px) scale(1.05);filter:blur(0)}
+  100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
 }
 /* h3: Obsessed with... */
 .iobs{
@@ -185,19 +269,10 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   max-width:60ch;margin-left:auto;margin-right:auto;
   line-height:1.7;
   opacity:0;transform:translateY(20px);transition:all 1s ease .28s;
-  position:relative;
-  padding-bottom:clamp(24px,3.6vh,36px);
-}
-.iwhat::after{
-  content:"❋";
-  position:absolute;left:50%;bottom:2px;transform:translateX(-50%);
-  color:var(--gold-deep);font-size:14px;line-height:1;
-  background:transparent;padding:0 8px;
-  font-family:var(--f-serif);
 }
 .iwhat b{color:var(--ink);font-weight:500}
 .iquote{
-  margin:clamp(6px,1vh,10px) auto 0;
+  margin:clamp(30px,4.5vh,52px) auto 0;
   max-width:min(52ch, 96%);
   padding:0 clamp(8px,2vw,20px);position:relative;
   font-family:var(--f-serif);font-style:italic;font-weight:400;
@@ -220,40 +295,208 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   background:linear-gradient(90deg,transparent 0%,var(--hair) 20%,var(--gold-deep) 50%,var(--hair) 80%,transparent 100%);
 }
 .iattr b{color:var(--ink);font-weight:500}
+.icta-wrap{
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;gap:16px;
+  margin-top:clamp(16px,2.6vh,26px);
+  opacity:0;transform:translateY(20px);transition:opacity 1s ease .58s,transform 1s ease .58s;
+}
+.iwrap.show .icta-wrap{opacity:1;transform:none}
+
+/* Sticky note lives collapsed in the bottom right — hover reveals full note */
+.iwarn-sticky{
+  position:absolute;
+  right:2%;
+  bottom:0;
+  transform:rotate(4deg);
+  transform-origin:top right;
+  width:auto;
+  padding:clamp(10px,1.2vw,14px) clamp(14px,1.6vw,18px);
+  background:
+    /* Subtle diagonal fold highlights */
+    linear-gradient(135deg, transparent 0%, transparent 30%, rgba(255,255,255,.35) 32%, transparent 34%, transparent 60%, rgba(139,90,46,.06) 62%, transparent 64%, transparent 100%),
+    /* Wrinkle shading gradients */
+    radial-gradient(ellipse 60% 30% at 20% 30%, rgba(139,90,46,.08), transparent 70%),
+    radial-gradient(ellipse 40% 25% at 75% 65%, rgba(255,255,255,.25), transparent 70%),
+    radial-gradient(ellipse 30% 20% at 85% 15%, rgba(139,90,46,.06), transparent 70%),
+    /* Paper noise texture */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='pn'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23pn)' opacity='0.18'/%3E%3C/svg%3E"),
+    /* Base yellow */
+    linear-gradient(180deg,#FBE79E 0%,#F5D97A 100%);
+  border:1px solid rgba(139,90,46,.28);
+  border-radius:2px;
+  box-shadow:
+    2px 4px 0 rgba(46,36,22,.08),
+    4px 8px 16px -6px rgba(46,36,22,.18),
+    inset 0 0 40px rgba(139,90,46,.06),
+    inset 0 -8px 12px rgba(139,90,46,.05);
+  opacity:0;
+  transition:
+    opacity 1s ease 1.2s,
+    padding .45s var(--ease),
+    box-shadow .45s var(--ease);
+  z-index:15;
+  pointer-events:auto;
+  cursor:pointer;
+  overflow:hidden;
+  max-width:min(240px, 30vw);
+  position:absolute;
+}
+.iwrap.show .iwarn-sticky{opacity:1}
+.iwarn-sticky:hover, .iwarn-sticky:focus-within{
+  padding:clamp(16px,1.8vw,22px) clamp(16px,1.8vw,20px) clamp(14px,1.6vw,18px);
+  transform:rotate(2deg) scale(1.02);
+  box-shadow:
+    4px 10px 0 rgba(46,36,22,.12),
+    8px 16px 28px -6px rgba(46,36,22,.25),
+    inset 0 0 40px rgba(139,90,46,.06),
+    inset 0 -8px 12px rgba(139,90,46,.05);
+}
+/* Wrinkle overlay - crumpled edges */
+.iwarn-sticky::before{
+  content:"";
+  position:absolute;inset:0;
+  background:
+    linear-gradient(105deg, transparent 45%, rgba(139,90,46,.04) 47%, transparent 49%),
+    linear-gradient(75deg, transparent 62%, rgba(255,255,255,.2) 64%, transparent 66%),
+    linear-gradient(160deg, transparent 20%, rgba(139,90,46,.05) 22%, transparent 24%);
+  pointer-events:none;
+  z-index:1;
+}
+.iwarn-sticky > *{position:relative;z-index:2}
+.sticky-tape{
+  position:absolute;
+  top:-8px;left:50%;
+  transform:translateX(-50%) rotate(-5deg);
+  width:56px;height:16px;
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(196,162,101,.35);
+  border-radius:1px;
+  box-shadow:0 2px 4px rgba(46,36,22,.12);
+  opacity:0;
+  transition:opacity .35s ease;
+}
+.iwarn-sticky:hover .sticky-tape, .iwarn-sticky:focus-within .sticky-tape{opacity:1}
+/* Marker-style label — red, spaced out for breathing room */
+.sticky-label{
+  display:block;
+  font-family:var(--f-diary-title);
+  color:var(--diary-red);
+  font-size:clamp(15px,1.5vw,18px);
+  line-height:1;
+  transform:rotate(-2deg);
+  transform-origin:left center;
+  white-space:nowrap;
+  font-weight:400;
+  letter-spacing:.06em;
+  word-spacing:.3em;
+  text-shadow:
+    0 1px 0 rgba(184,79,58,.2),
+    0 0 1px rgba(184,79,58,.35);
+}
+.sticky-body{
+  font-family:var(--f-diary);
+  color:var(--diary-ink);
+  font-size:clamp(12.5px,1.2vw,14px);
+  line-height:1.45;
+  margin:0;
+  font-weight:400;
+  width:min(200px, 26vw);
+  max-height:0;
+  opacity:0;
+  transition:max-height .45s var(--ease), opacity .35s ease, margin-top .35s ease;
+  margin-top:0;
+}
+.iwarn-sticky:hover .sticky-body, .iwarn-sticky:focus-within .sticky-body{
+  max-height:200px;
+  opacity:1;
+  margin-top:8px;
+}
+/* Hand-drawn wobbly arrow only appears on hover, curling from the sticky note toward the button */
+.sticky-arrow{
+  position:absolute;
+  left:-140px;
+  top:20px;
+  width:170px;height:130px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .4s ease;
+  overflow:visible;
+}
+.iwarn-sticky:hover .sticky-arrow, .iwarn-sticky:focus-within .sticky-arrow{opacity:.9}
+.sticky-arrow .sa-line,
+.sticky-arrow .sa-head{
+  stroke:var(--diary-red);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  fill:none;
+  filter:drop-shadow(0 1px 0 rgba(184,79,58,.25));
+}
+.sticky-arrow .sa-line{
+  stroke-dasharray:260;
+  stroke-dashoffset:260;
+}
+.iwarn-sticky:hover .sa-line, .iwarn-sticky:focus-within .sa-line{
+  animation:arrowDraw 1s cubic-bezier(.5,.1,.3,1) forwards;
+}
+.sticky-arrow .sa-head{opacity:0}
+.iwarn-sticky:hover .sa-head, .iwarn-sticky:focus-within .sa-head{
+  animation:arrowHead .3s ease .95s forwards;
+}
+@keyframes arrowDraw{
+  to{stroke-dashoffset:0}
+}
+@keyframes arrowHead{
+  to{opacity:1}
+}
+.iwrap.show .ieyebrow,.iwrap.show .ihi,.iwrap.show .iobs,.iwrap.show .iwhat,.iwrap.show .iquote,.iwrap.show .iattr,.iwrap.show .icta{opacity:1;transform:none}
+.icta-side{
+  font-family:var(--f-serif);font-style:italic;
+  color:var(--gold-deep);font-size:clamp(20px,2.2vw,26px);line-height:1;
+  user-select:none;
+  pointer-events:none;
+}
+.icta-side.left{animation:sidePulseLeft 1.6s ease-in-out infinite}
+.icta-side.right{animation:sidePulseRight 1.6s ease-in-out .4s infinite}
+@keyframes sidePulseLeft{
+  0%,100%{opacity:.35;transform:translateX(0)}
+  50%{opacity:.85;transform:translateX(6px)}
+}
+@keyframes sidePulseRight{
+  0%,100%{opacity:.35;transform:translateX(0)}
+  50%{opacity:.85;transform:translateX(-6px)}
+}
 .icta{
   display:inline-flex;align-items:center;gap:12px;
-  margin-top:clamp(16px,2.6vh,26px);
   max-width:100%;
   position:relative;z-index:5;
   font-size:clamp(10.5px,1.05vw,12px);letter-spacing:.24em;text-transform:uppercase;color:var(--ink);
   background:rgba(255,255,255,.55);border:1px solid var(--ink);border-radius:100px;
   padding:clamp(12px,1.4vw,15px) clamp(24px,3vw,30px);
-  transition:all .35s var(--ease);
+  transition:color .4s var(--ease), border-color .4s var(--ease);
   white-space:nowrap;
-  opacity:0;transform:translateY(20px);
+  overflow:hidden;
+  isolation:isolate;
+  cursor:pointer;
 }
-.icta.show{opacity:1;transform:none;transition:opacity 1s ease .58s,transform 1s ease .58s,background .35s var(--ease),color .35s var(--ease),letter-spacing .35s var(--ease)}
-.icta:hover{background:var(--ink);color:var(--cloud)}
-.icta .a{font-family:var(--f-serif);font-style:italic;font-size:clamp(15px,1.5vw,17px);letter-spacing:0}
-.iwarn{
-  margin:clamp(20px,3vh,30px) auto 0;
-  max-width:min(78ch, 96%);
-  padding:clamp(20px,3vh,28px) clamp(8px,2vw,16px) 0;
-  font-family:var(--f-serif);font-style:italic;font-weight:500;
-  font-size:clamp(13.5px,1.4vw,16px);line-height:1.55;
-  color:#8B5A2E;
-  text-align:center;
-  opacity:0;transform:translateY(12px);transition:all 1s ease .7s;
-  position:relative;
-}
-.iwarn::before{
+/* Gold fill sweeps in from left on hover */
+.icta::before{
   content:"";
-  position:absolute;left:50%;top:0;transform:translateX(-50%);
-  width:clamp(40px,5vw,60px);height:1px;
-  background:var(--hair);
+  position:absolute;inset:0;
+  background:linear-gradient(90deg, var(--gold-deep), var(--sun));
+  transform:translateX(-101%);
+  transition:transform .5s cubic-bezier(.7,.05,.3,1);
+  z-index:-1;
 }
-.iwarn b{color:var(--ink);font-style:normal;font-weight:600}
-.iwrap.show .ieyebrow,.iwrap.show .ihi,.iwrap.show .iobs,.iwrap.show .iwhat,.iwrap.show .iquote,.iwrap.show .iattr,.iwrap.show .iwarn,.iwrap.show .icta{opacity:1;transform:none}
+.icta:hover::before{transform:translateX(0)}
+.icta:hover{color:#fff;border-color:var(--gold-deep)}
+.icta .a{
+  font-family:var(--f-serif);font-style:italic;font-size:clamp(15px,1.5vw,17px);letter-spacing:0;
+  transition:transform .4s var(--ease);
+}
+.icta:hover .a{transform:translateX(6px)}
+.iwrap.show .ieyebrow,.iwrap.show .ihi,.iwrap.show .iobs,.iwrap.show .iwhat,.iwrap.show .iquote,.iwrap.show .iattr,.iwrap.show .icta{opacity:1;transform:none}
 
 /* dust */
 #dust{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .3s ease}
@@ -377,6 +620,56 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   transition:opacity .6s ease .3s;
 }
 #top.orbit-mode ~ .hint{opacity:1}
+#top.chamber-open ~ .hint{opacity:0}
+
+/* First-visit orbit onboarding cue */
+#orbitCue{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:50;
+  display:flex;align-items:center;justify-content:center;gap:clamp(18px,2.5vw,32px);
+  padding:clamp(18px,2.4vw,26px) clamp(24px,3vw,36px);
+  background:rgba(255,255,255,.86);
+  backdrop-filter:blur(18px) saturate(1.15);-webkit-backdrop-filter:blur(18px) saturate(1.15);
+  border:1px solid var(--hair);
+  border-radius:100px;
+  box-shadow:0 30px 60px -20px rgba(27,37,48,.25),0 0 0 1px rgba(196,162,101,.15);
+  opacity:0;pointer-events:none;
+  transition:opacity .8s ease,transform .8s ease;
+  cursor:pointer;
+}
+#orbitCue.on{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+#orbitCue.dismissed{opacity:0;transform:translate(-50%,calc(-50% - 20px)) scale(.96)}
+#orbitCue .cue-arrow{
+  font-family:var(--f-serif);color:var(--gold-deep);
+  font-size:clamp(22px,2.4vw,28px);line-height:1;font-weight:500;
+  animation:cueArrowPulse 1.6s ease-in-out infinite;
+}
+#orbitCue .cue-arrow.down{animation-delay:.8s}
+@keyframes cueArrowPulse{
+  0%,100%{opacity:.4;transform:translateY(0)}
+  50%{opacity:1;transform:translateY(3px)}
+}
+#orbitCue .cue-arrow.up{animation-name:cueArrowPulseUp}
+@keyframes cueArrowPulseUp{
+  0%,100%{opacity:.4;transform:translateY(0)}
+  50%{opacity:1;transform:translateY(-3px)}
+}
+#orbitCue .cue-text{
+  display:flex;flex-direction:column;gap:4px;text-align:center;
+}
+#orbitCue .cue-strong{
+  font-family:var(--f-sans);font-size:clamp(11px,1.15vw,13px);
+  letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--ink);
+}
+#orbitCue .cue-sub{
+  font-family:var(--f-serif);font-style:italic;
+  font-size:clamp(13px,1.35vw,15px);color:var(--gold-deep);line-height:1.3;
+}
+@media (max-width:640px){
+  #orbitCue{padding:14px 20px;gap:12px}
+  #orbitCue .cue-strong{font-size:10px;letter-spacing:.14em}
+  #orbitCue .cue-sub{font-size:12px}
+}
 .hint .k{
   display:inline-flex;align-items:center;justify-content:center;
   min-width:26px;height:22px;padding:0 6px;
@@ -389,7 +682,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   position:fixed;inset:0;z-index:40;opacity:0;visibility:hidden;pointer-events:none;
   transition:opacity .45s ease,visibility .45s;
   display:flex;align-items:center;justify-content:center;
-  padding:clamp(80px,10vh,110px) var(--gutter) clamp(40px,6vh,70px);
+  padding:clamp(40px,6vh,70px) var(--gutter);
 }
 .chamber.open{opacity:1;visibility:visible;pointer-events:auto}
 .chbg{
@@ -404,25 +697,60 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   max-width:min(820px, 100%);
   max-height:100%;
   margin:0 auto;
-  background:rgba(255,255,255,.96);
-  border:1px solid rgba(255,255,255,.9);
-  border-radius:clamp(16px,2vw,22px);
+  background:
+    /* Coffee stain in top-right — very subtle */
+    radial-gradient(ellipse 90px 24px at 82% 6%, rgba(139,90,46,.10), transparent 70%),
+    radial-gradient(ellipse 60px 60px at 85% 5%, rgba(139,90,46,.06), transparent 65%),
+    /* Base cream paper */
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-shade) 100%);
+  border:1px solid rgba(196,162,101,.35);
+  border-radius:clamp(6px,1vw,10px);
   box-shadow:
-    0 50px 100px -30px rgba(27,37,48,.4),
-    0 20px 40px -20px rgba(196,162,101,.15),
-    0 0 0 1px rgba(213,223,233,.3);
+    0 60px 100px -30px rgba(46,36,22,.45),
+    0 30px 50px -25px rgba(196,162,101,.35),
+    inset 0 0 0 1px rgba(255,255,255,.5),
+    inset 0 1px 3px rgba(255,255,255,.6);
   overflow:hidden;
   display:flex;flex-direction:column;
   transform:scale(.96) translateY(12px);
   transition:transform .5s var(--ease);
 }
 .chamber.open .chcard{transform:scale(1) translateY(0)}
+/* Paper grain overlay for extra texture — static, doesn't scroll */
+.chcard::before{
+  content:"";
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='pn'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23pn)' opacity='0.35'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+  opacity:.45;
+  pointer-events:none;
+  z-index:1;
+}
+/* Left margin line — red like a school notebook — static */
+.chcard::after{
+  content:"";
+  position:absolute;top:0;bottom:0;
+  left:clamp(52px,7vw,80px);width:1px;
+  background:rgba(184,79,58,.4);
+  z-index:1;
+  pointer-events:none;
+}
 .chscroll{
   flex:1;
   overflow-y:auto;overflow-x:hidden;
-  padding:clamp(28px,4.5vw,60px);
+  padding:clamp(40px,5.5vw,72px) clamp(28px,4vw,54px) clamp(28px,4vw,54px) clamp(70px,9vw,110px);
   scrollbar-width:thin;scrollbar-color:var(--gold) transparent;
   overscroll-behavior:contain;
+  position:relative;z-index:2;
+  /* Static ruled lines — attached to the scrollable viewport, not the content, so they don't scroll with text */
+  background-image:repeating-linear-gradient(180deg,
+    transparent 0,
+    transparent 33px,
+    var(--paper-line) 33px,
+    var(--paper-line) 34px
+  );
+  background-attachment:local;
+  background-repeat:repeat-y;
 }
 .chscroll::-webkit-scrollbar{width:6px}
 .chscroll::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
@@ -444,30 +772,110 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 .close:hover{background:var(--ink);color:var(--cloud);border-color:var(--ink)}
 .close:hover::before{transform:translateX(-3px)}
 
-/* chamber typography */
+/* chamber typography — diary style */
 .ch-eyebrow{
   display:flex;align-items:center;gap:14px;
-  font-size:clamp(10px,1.1vw,11px);letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);
-  margin-bottom:clamp(16px,2.4vh,22px);
+  font-family:var(--f-diary);font-weight:400;
+  font-size:clamp(13px,1.4vw,15px);letter-spacing:.05em;text-transform:uppercase;color:var(--diary-red);
+  margin-bottom:clamp(6px,1.4vh,12px);
+  transform:rotate(-.6deg);
 }
-.ch-eyebrow::before,.ch-eyebrow::after{content:"";height:1px;flex:1;background:var(--hair);max-width:80px}
+.ch-eyebrow::before,.ch-eyebrow::after{content:"";height:1px;flex:1;background:rgba(184,79,58,.28);max-width:80px}
 .chamber h2{
-  font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(32px,6.4vw,72px);line-height:1.02;color:var(--ink);
-  letter-spacing:-.015em;
-  margin-bottom:clamp(20px,3vh,28px);
-  overflow-wrap:break-word;word-wrap:break-word;hyphens:auto;
+  font-family:var(--f-diary-title);font-weight:400;
+  font-size:clamp(46px,7vw,84px);line-height:1;color:var(--diary-ink);
+  letter-spacing:.005em;
+  margin-bottom:clamp(24px,3.4vh,36px);
+  overflow-wrap:break-word;
+  transform:rotate(-1.2deg);
+  transform-origin:left center;
 }
-.chamber h2 em{color:var(--gold-deep)}
+.chamber h2 em{color:var(--diary-red);font-style:normal}
 .chamber p{
-  color:var(--ink-2);
-  font-size:clamp(14.5px,1.4vw,17px);line-height:1.72;
-  margin-bottom:16px;
+  color:var(--diary-ink);
+  font-family:var(--f-diary);font-weight:400;
+  font-size:clamp(18px,1.75vw,21px);line-height:1.7;
+  margin-bottom:18px;
   max-width:60ch;
-  overflow-wrap:break-word;word-wrap:break-word;
+  overflow-wrap:break-word;
 }
-.chamber p b{color:var(--ink);font-weight:600}
-.chamber p .it{font-family:var(--f-serif);font-style:italic;color:var(--ink)}
+.chamber p b{color:var(--diary-ink);font-weight:700}
+.chamber p .it{
+  font-family:var(--f-hand);font-style:normal;
+  color:var(--diary-red);font-size:1.05em;
+}
+
+/* Diary emphasis — hand-drawn red pen underline on specific phrases */
+.chamber .mark-ink{
+  position:relative;
+  display:inline;
+  color:var(--diary-ink);
+  font-weight:700;
+  background-image:linear-gradient(180deg, transparent 82%, rgba(184,79,58,.75) 82%, rgba(184,79,58,.75) 92%, transparent 92%);
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+  padding:0 2px;
+}
+.chamber .mark-ink::after{
+  content:"";
+  position:absolute;
+  left:-2px;right:-2px;bottom:-2px;
+  height:3px;
+  background:radial-gradient(ellipse at 30% 50%, transparent 40%, rgba(184,79,58,.4) 42%, transparent 65%);
+  transform:rotate(-.5deg);
+  pointer-events:none;
+}
+/* Legacy data-tick as full-line underline for lines that are inherently short */
+.chamber li[data-tick]{
+  position:relative;
+}
+.chamber li[data-tick]::marker{content:none}
+.chamber li[data-tick]::before{
+  left:-6px;top:8px;
+  font-size:clamp(20px,2.2vw,26px);
+}
+
+/* Hand-drawn strikethrough — looks like a real ink scratch through */
+.chamber s, .chamber del{
+  text-decoration:none;
+  position:relative;
+  color:rgba(46,36,22,.5);
+  font-style:italic;
+  padding:0 2px;
+}
+.chamber s::after, .chamber del::after{
+  content:"";
+  position:absolute;
+  left:-3px;right:-3px;top:50%;
+  height:2.5px;
+  background:
+    radial-gradient(ellipse at 12% 50%, transparent 45%, rgba(184,79,58,.9) 47%, transparent 68%),
+    radial-gradient(ellipse at 88% 50%, transparent 45%, rgba(184,79,58,.9) 47%, transparent 68%),
+    linear-gradient(90deg,
+      transparent 0%,
+      var(--diary-red) 8%,
+      var(--diary-red) 92%,
+      transparent 100%
+    );
+  border-radius:3px;
+  transform:rotate(-1deg) translateY(-50%);
+  filter:drop-shadow(0 1px 0 rgba(184,79,58,.25));
+}
+.chamber s:nth-of-type(even)::after, .chamber del:nth-of-type(even)::after{
+  transform:rotate(1.2deg) translateY(-50%);
+}
+
+/* Note in margin (small handwritten aside pinned to the side) */
+.chamber .margin-note{
+  display:block;
+  font-family:var(--f-hand);
+  color:var(--diary-teal);
+  font-size:clamp(14px,1.4vw,17px);
+  line-height:1.2;
+  transform:rotate(-3deg);
+  margin:12px 0 12px clamp(20px,3vw,40px);
+  max-width:40ch;
+}
 
 /* about */
 .about-cols{
@@ -477,31 +885,56 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   align-items:start;margin-top:6px;
 }
 .about-stats{position:sticky;top:6px}
-.about-stat{margin-bottom:clamp(18px,2.6vh,24px)}
+.about-stat{margin-bottom:clamp(20px,2.8vh,28px);transform:rotate(-1deg)}
+.about-stat:nth-child(even){transform:rotate(1.2deg)}
 .about-stat b{
-  display:block;font-family:var(--f-serif);font-style:italic;font-weight:400;
-  font-size:clamp(32px,4.4vw,54px);line-height:1;color:var(--gold-deep);letter-spacing:-.02em;
+  display:block;font-family:var(--f-diary-title);font-weight:400;
+  font-size:clamp(40px,5.4vw,68px);line-height:1;color:var(--diary-red);letter-spacing:.005em;
 }
-.about-stat span{font-size:clamp(10px,1vw,11px);letter-spacing:.22em;text-transform:uppercase;color:var(--whisper);margin-top:8px;display:block}
+.about-stat span{
+  font-family:var(--f-diary);font-weight:400;
+  font-size:clamp(13px,1.3vw,15px);letter-spacing:.03em;text-transform:uppercase;color:var(--diary-ink);opacity:.75;
+  margin-top:8px;display:block;
+}
 
-/* journey */
+/* journey — diary style */
 .journey p{margin-bottom:20px;max-width:60ch}
 .journey p.pause{
-  margin:clamp(24px,3.6vh,34px) 0 clamp(16px,2.4vh,24px);
-  font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(18px,2.2vw,24px);color:var(--gold-deep);line-height:1.35;
+  margin:clamp(28px,4vh,40px) 0 clamp(16px,2.4vh,24px);
+  font-family:var(--f-diary);font-weight:700;
+  font-size:clamp(22px,2.4vw,28px);color:var(--diary-red);line-height:1.3;
+  letter-spacing:.005em;
+  transform:rotate(-.4deg);
 }
-.journey .aside{display:inline;color:var(--gold-deep);font-style:italic}
+.journey .aside{
+  display:inline;
+  font-family:var(--f-hand);font-weight:400;
+  color:var(--diary-red);
+  font-size:1.05em;line-height:1.2;
+}
 
 /* belief */
 .belief-body h2{margin-bottom:clamp(22px,3.4vh,32px)}
 .belief-body p{font-size:clamp(15px,1.5vw,18px)}
 .belief-quiet{
-  display:block;margin:clamp(20px,3vh,26px) 0;padding:clamp(18px,2.4vw,22px) clamp(20px,2.8vw,26px);
-  background:rgba(196,162,101,.08);border-left:2px solid var(--gold-deep);
-  font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(18px,2.2vw,24px);line-height:1.3;color:var(--ink);
-  border-radius:0 8px 8px 0;
+  display:block;margin:clamp(24px,3.4vh,32px) 0;
+  padding:clamp(12px,1.6vw,18px) 0;
+  background:none;border-left:none;
+  font-family:var(--f-diary-title);font-weight:400;
+  font-size:clamp(38px,5vw,60px);line-height:1;color:var(--diary-ink);
+  letter-spacing:.005em;
+  transform:rotate(-1.5deg);
+  position:relative;
+  text-align:left;
+}
+.belief-quiet::after{
+  content:"";
+  position:absolute;left:0;bottom:6px;
+  width:78%;height:3px;
+  background:var(--diary-red);
+  border-radius:2px;
+  transform:rotate(-.8deg);
+  opacity:.85;
 }
 
 /* craft — the map */
@@ -517,38 +950,108 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   width:100%;height:100%;
   pointer-events:none;
   overflow:visible;
-  filter:drop-shadow(0 0 6px rgba(196,162,101,.35)) drop-shadow(0 0 14px rgba(244,201,122,.18));
 }
-.craft-trail-flow{
-  stroke-dashoffset:0;
-  animation:trailFlow 8s linear infinite;
+/* Faint shadow layer so the ink line looks like it bled through */
+.craft-trail-shadow{
+  fill:none;
+  stroke:rgba(184,79,58,.18);
+  stroke-width:5;
+  stroke-linecap:round;
+  filter:blur(2.5px);
 }
-@keyframes trailFlow{
-  from{stroke-dashoffset:0}
-  to{stroke-dashoffset:-404}
+/* Main ink stroke — diary red, hand-drawn feel */
+.craft-trail-ink{
+  fill:none;
+  stroke:var(--diary-red);
+  stroke-width:2.2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:.75;
+  filter:drop-shadow(0 1px 0 rgba(184,79,58,.35));
 }
+.trail-arrows path{
+  fill:var(--diary-red);
+  stroke:var(--diary-red);
+  stroke-width:1;
+  stroke-linejoin:round;
+  opacity:.85;
+}
+.trail-markers .trail-start{
+  fill:var(--diary-red);
+  opacity:.95;
+}
+.trail-markers .trail-start-outer{
+  fill:none;
+  stroke:var(--diary-red);
+  stroke-width:1.5;
+  stroke-dasharray:2 3;
+  opacity:.7;
+  transform-origin:100px 80px;
+  animation:startPulse 2.4s ease-in-out infinite;
+}
+@keyframes startPulse{
+  0%,100%{opacity:.7;transform:scale(1)}
+  50%{opacity:.35;transform:scale(1.25)}
+}
+.trail-markers .trail-end{
+  fill:var(--diary-ink);
+  stroke:var(--diary-red);
+  stroke-width:2;
+}
+/* Hand-scrawled margin notes floating in the empty spaces */
+.craft-note{
+  position:absolute;
+  left:var(--x);top:var(--y);
+  transform:translate(-50%,-50%) rotate(var(--r,0deg));
+  font-family:var(--f-hand);
+  color:var(--diary-teal);
+  font-size:clamp(15px,1.4vw,18px);
+  line-height:1.15;
+  max-width:14ch;
+  text-align:center;
+  pointer-events:none;
+  z-index:3;
+  opacity:.85;
+}
+.craft-note.end{color:var(--diary-red);font-weight:400}
 .craft-map .stop{
   position:absolute;
   left:var(--x);top:var(--y);
-  transform:translate(-50%,-50%);
+  transform:translate(-50%,-50%) rotate(-.5deg);
   display:flex;flex-direction:column;align-items:flex-start;gap:6px;
-  padding:14px 20px;
-  border-radius:14px;
-  background:rgba(255,255,255,.75);
-  border:1px solid rgba(213,223,233,.7);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  padding:16px 22px;
+  border-radius:2px;
+  background:rgba(255,252,244,.92);
+  border:1px solid rgba(196,162,101,.55);
   min-width:180px;max-width:280px;
   cursor:pointer;
   text-align:left;
   transition:all .35s var(--ease);
   z-index:2;
-  box-shadow:0 0 0 rgba(196,162,101,0);
+  box-shadow:2px 4px 0 rgba(46,36,22,.08), 4px 8px 20px -8px rgba(46,36,22,.15);
 }
-/* soft ambient glow behind each stop */
+.craft-map .stop:nth-child(even){transform:translate(-50%,-50%) rotate(.7deg)}
+.craft-map .stop:nth-child(3n){transform:translate(-50%,-50%) rotate(-.9deg)}
+/* Taped corner detail — small piece of translucent tape at top-left */
+.craft-map .stop::after{
+  content:"";
+  position:absolute;
+  top:-6px;left:14px;
+  width:28px;height:12px;
+  background:rgba(196,162,101,.28);
+  border:1px solid rgba(196,162,101,.35);
+  border-radius:1px;
+  transform:rotate(-8deg);
+  box-shadow:0 1px 2px rgba(46,36,22,.08);
+  pointer-events:none;
+  z-index:3;
+}
+.craft-map .stop:nth-child(even)::after{transform:rotate(6deg);left:auto;right:14px}
+/* Soft ambient glow behind each stop — warm diary tone */
 .craft-map .stop::before{
   content:"";
-  position:absolute;inset:-14px;border-radius:20px;
-  background:radial-gradient(ellipse at center, rgba(244,201,122,.28), transparent 65%);
+  position:absolute;inset:-12px;border-radius:14px;
+  background:radial-gradient(ellipse at center, rgba(184,79,58,.14), transparent 65%);
   opacity:.55;z-index:-1;
   animation:stopPulse 4s ease-in-out infinite;
   pointer-events:none;
@@ -560,30 +1063,30 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   50%{opacity:.7;transform:scale(1.06)}
 }
 .craft-map .stop:hover, .craft-map .stop:focus-visible{
-  background:rgba(255,255,255,.98);
-  border-color:var(--gold);
-  box-shadow:0 24px 50px -20px rgba(196,162,101,.45),0 0 30px rgba(244,201,122,.35);
-  transform:translate(-50%,-50%) scale(1.03);
+  background:rgba(255,252,244,1);
+  border-color:var(--diary-red);
+  box-shadow:0 24px 50px -20px rgba(184,79,58,.35),0 0 30px rgba(244,201,122,.35);
+  transform:translate(-50%,-50%) scale(1.05) rotate(0deg);
   z-index:5;
 }
 .craft-map .stop:hover::before, .craft-map .stop:focus-visible::before{
   opacity:1;transform:scale(1.15);
   background:radial-gradient(ellipse at center, rgba(244,201,122,.5), transparent 65%);
 }
-/* dim the other stops when one is hovered */
 .craft-map:hover .stop{opacity:.5;filter:blur(.4px)}
 .craft-map:hover .stop:hover{opacity:1;filter:none}
 .craft-map .stop-no{
-  font-family:var(--f-serif);font-style:italic;
-  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--gold-deep);font-weight:500;
+  font-family:var(--f-diary);font-weight:700;
+  font-size:14px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--diary-red);
 }
 .craft-map .stop-title{
-  font-family:var(--f-serif);font-style:italic;font-weight:500;
-  font-size:clamp(17px,1.9vw,20px);line-height:1.2;color:var(--ink);
+  font-family:var(--f-diary-title);font-weight:400;
+  font-size:clamp(22px,2.4vw,26px);line-height:1.1;color:var(--diary-ink);
 }
 .craft-map .stop-body{
-  font-size:clamp(13px,1.3vw,14px);color:var(--ink-2);line-height:1.55;
+  font-family:var(--f-diary);font-weight:400;
+  font-size:clamp(15px,1.4vw,17px);color:var(--diary-ink);line-height:1.55;
   max-height:0;overflow:hidden;opacity:0;
   margin-top:0;
   transition:max-height .4s var(--ease),opacity .3s ease,margin-top .3s ease;
@@ -600,6 +1103,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     max-width:none;
   }
   .craft-trail{display:none}
+  .craft-note{display:none}
   .craft-map .stop{
     position:relative;left:auto !important;top:auto !important;
     transform:none;
@@ -610,50 +1114,66 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   .craft-map .stop-body{max-height:200px;opacity:1;margin-top:8px}
 }
 
-/* works */
-.works-list{display:flex;flex-direction:column;gap:clamp(14px,2vw,20px);margin-top:6px}
+/* works — diary style */
+.works-list{display:flex;flex-direction:column;gap:clamp(18px,2.4vw,26px);margin-top:6px}
 .work{
   padding:clamp(22px,2.8vw,28px);
-  border:1px solid rgba(213,223,233,.7);border-radius:14px;
-  background:rgba(255,255,255,.6);
+  border:1px solid rgba(196,162,101,.35);
+  border-radius:6px;
+  background:rgba(255,252,244,.7);
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
   gap:clamp(20px,2.6vw,30px);
   align-items:start;
   transition:all .3s var(--ease);
+  transform:rotate(-.3deg);
+  box-shadow:2px 3px 0 rgba(46,36,22,.05);
 }
-.work:hover{border-color:var(--gold);background:rgba(255,255,255,.8)}
+.work:nth-child(even){transform:rotate(.4deg)}
+.work:hover{border-color:var(--diary-red);background:rgba(255,252,244,.95);transform:rotate(0deg) translateY(-2px)}
 .work > div{min-width:0}
 .work .mark{
-  font-size:clamp(10px,1vw,11px);letter-spacing:.2em;text-transform:uppercase;color:var(--whisper);
+  font-family:var(--f-diary);font-weight:400;
+  font-size:clamp(13px,1.35vw,15px);letter-spacing:.05em;text-transform:uppercase;color:var(--diary-red);
   margin-bottom:12px;
 }
-.work .mark b{color:var(--gold-deep);font-weight:500}
+.work .mark b{color:var(--diary-ink);font-weight:700}
 .wname{
-  font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(22px,3vw,32px);line-height:1;color:var(--ink);
+  font-family:var(--f-diary-title);font-weight:400;
+  font-size:clamp(30px,4vw,44px);line-height:1;color:var(--diary-ink);
   margin-bottom:14px;overflow-wrap:break-word;
+  transform:rotate(-.8deg);transform-origin:left center;
 }
-.wname em{color:var(--gold-deep)}
-.work p{font-size:clamp(13.5px,1.4vw,15px);color:var(--ink-2);margin-bottom:14px;max-width:none}
+.wname em{color:var(--diary-red);font-style:normal}
+.work p{
+  font-family:var(--f-diary);font-weight:400;
+  font-size:clamp(16px,1.55vw,19px);color:var(--diary-ink);
+  margin-bottom:14px;max-width:none;line-height:1.6;
+}
 .wnums{display:flex;gap:clamp(18px,2.4vw,26px);flex-wrap:wrap;margin-bottom:14px}
 .wnums div{min-width:0}
 .wnums div b{
-  display:block;font-family:var(--f-serif);font-style:italic;color:var(--gold-deep);
-  font-size:clamp(22px,2.6vw,30px);line-height:1;
+  display:block;font-family:var(--f-diary-title);font-weight:400;color:var(--diary-red);
+  font-size:clamp(28px,3.4vw,40px);line-height:1;
 }
-.wnums div span{font-size:clamp(9.5px,1vw,10px);letter-spacing:.18em;text-transform:uppercase;color:var(--whisper);display:block;margin-top:6px}
+.wnums div span{
+  font-family:var(--f-diary);font-weight:400;
+  font-size:clamp(11.5px,1.15vw,13px);letter-spacing:.04em;text-transform:uppercase;color:var(--diary-ink);opacity:.7;
+  display:block;margin-top:6px;
+}
 .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .tag{
-  font-size:clamp(9.5px,1vw,10px);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
-  border:1px solid rgba(213,223,233,.7);border-radius:100px;
-  padding:6px 12px;background:rgba(255,255,255,.55);
+  font-family:var(--f-diary);font-weight:400;
+  font-size:clamp(11.5px,1.2vw,13px);letter-spacing:.03em;color:var(--diary-ink);
+  border:1px dashed rgba(196,162,101,.6);border-radius:100px;
+  padding:5px 12px;background:rgba(255,252,244,.5);
 }
 .wlink{
-  font-size:clamp(10.5px,1.1vw,11px);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep);
-  border-bottom:1px solid transparent;transition:border-color .25s;display:inline-block;
+  font-family:var(--f-diary);font-weight:700;
+  font-size:clamp(13px,1.3vw,15px);letter-spacing:.04em;color:var(--diary-red);
+  border-bottom:2px solid transparent;transition:border-color .25s;display:inline-block;
 }
-.wlink:hover{border-color:var(--gold-deep)}
+.wlink:hover{border-color:var(--diary-red)}
 
 /* gallery */
 .gal-hw{
@@ -686,21 +1206,28 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 
 /* ambition */
 .amb-lead{
-  font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(22px,3.2vw,32px);line-height:1.2;color:var(--gold-deep);
-  margin-bottom:22px;max-width:32ch;
+  font-family:var(--f-diary);font-weight:700;
+  font-size:clamp(22px,2.6vw,30px);line-height:1.35;color:var(--diary-red);
+  margin-bottom:22px;max-width:36ch;
 }
 .vow{
-  display:block;font-family:var(--f-serif);font-style:italic;
-  font-size:clamp(26px,5vw,54px);line-height:1;color:var(--ink);
-  margin:24px 0;letter-spacing:-.015em;
+  display:block;
+  font-family:var(--f-diary-title);font-weight:400;
+  font-size:clamp(32px,4.8vw,58px);line-height:1.05;color:var(--diary-ink);
+  margin:clamp(24px,3.4vh,32px) 0;letter-spacing:.005em;
   overflow-wrap:break-word;
+  transform:rotate(-1deg);
 }
-.vow em{color:var(--gold-deep)}
+.vow em{color:var(--diary-red);font-style:normal}
 .amb-list{list-style:none;padding:0;margin:16px 0;max-width:60ch}
-.amb-list li{padding:10px 0 10px 22px;position:relative;color:var(--ink-2);font-size:clamp(14.5px,1.4vw,16px);line-height:1.55}
-.amb-list li::before{content:"◦";position:absolute;left:0;color:var(--gold-deep);font-size:20px;top:4px}
-.amb-list li b{color:var(--ink);font-weight:600}
+.amb-list li{
+  padding:12px 0 12px 22px;position:relative;
+  font-family:var(--f-diary);font-weight:400;
+  color:var(--diary-ink);font-size:clamp(16px,1.55vw,19px);line-height:1.6;
+}
+.amb-list li::before{content:"◦";position:absolute;left:0;color:var(--diary-red);font-size:22px;top:10px}
+.amb-list li[data-tick]::before{content:none}
+.amb-list li b{color:var(--diary-ink);font-weight:700}
 
 /* contact */
 .cbadge{
@@ -773,7 +1300,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     --safe-bot:60px;
   }
   #top{padding:12px 16px;gap:10px}
-  .tnav{gap:16px}
+  .tnav{gap:18px}
   .tnav a{font-size:10.5px;letter-spacing:.12em}
   .iquote::before,.iquote::after{display:none}
   .stage{aspect-ratio:1.4/1.15}
@@ -803,15 +1330,28 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 @media (max-height:640px){
   :root{--safe-top:64px;--safe-bot:44px}
   .icloud{height:min(500px,88vh)}
-  .iwarn{margin-top:22px;padding:14px 18px}
   .icta{margin-top:22px}
   .stage{max-height:64vh}
 }
 
 /* Very short */
 @media (max-height:520px){
-  .iwarn{display:none}
+  .iwarn-sticky{display:none}
   .iquote{margin-top:20px}
+}
+
+/* On narrower screens, the sticky note moves below the button instead of beside it */
+@media (max-width:820px){
+  .iwarn-sticky{
+    position:relative;
+    right:auto;top:auto;
+    transform:rotate(3deg);
+    margin:clamp(20px,3vh,30px) auto 0;
+    width:min(280px, 84vw);
+  }
+  .iwrap.show .iwarn-sticky{transform:rotate(3deg)}
+  .iwarn-sticky:hover{transform:translateY(-2px) rotate(1deg)}
+  .sticky-arrow{display:none}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -840,8 +1380,20 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 </div>
 <div id="grain" aria-hidden="true"></div>
 
+<!-- Cursor-drifting cloud -->
+<div id="drift-cloud" aria-hidden="true">
+  <svg viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="dcg"><stop offset="0%" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset="55%" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>
+    </defs>
+    <ellipse cx="260" cy="170" rx="240" ry="130" fill="url(#dcg)"/>
+    <ellipse cx="180" cy="150" rx="120" ry="80" fill="url(#dcg)" opacity=".7"/>
+    <ellipse cx="340" cy="190" rx="140" ry="90" fill="url(#dcg)" opacity=".7"/>
+  </svg>
+</div>
+
 <header id="top">
-  <button class="brand" id="brandBtn" aria-label="Back to home">Parth <em>Tita.</em></button>
+  <button class="brand" id="brandBtn" aria-label="Back to home"><span class="bl">P</span><span class="bl">a</span><span class="bl">r</span><span class="bl">t</span><span class="bl">h</span><span class="bl">&nbsp;</span><span class="bl">T</span><span class="bl">i</span><span class="bl">t</span><span class="bl">a</span></button>
   <span class="tspacer"></span>
   <nav class="tnav">
     <a href="https://www.linkedin.com/in/parth-tita-58123b248/" target="_blank" rel="noopener">LinkedIn</a>
@@ -853,16 +1405,27 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 <section id="intro">
   <div class="iwrap" id="iwrap">
     <div class="icloud" aria-hidden="true"></div>
-    <h1 class="ihi">Hi, I'm <span class="parth">Parth.</span></h1>
+    <h1 class="ihi">Hi, I'm <span class="parth"><span class="lt">P</span><span class="lt">a</span><span class="lt">r</span><span class="lt">t</span><span class="lt">h</span><span class="lt">.</span></span></h1>
     <h3 class="iobs">Obsessed with why people click, stay, and pay.</h3>
-    <p class="iwhat">GTM and growth by trade, script writer by love. You're about to explore my journey, my thinking, and everything I've come to believe about attention. <b>Take your time.</b></p>
+
+    <div class="icta-wrap">
+      <span class="icta-side left" aria-hidden="true">→</span>
+      <button class="icta" id="enterBtn" style="pointer-events:auto">Let's explore <span class="a">→</span></button>
+      <span class="icta-side right" aria-hidden="true">←</span>
+    </div>
+
+    <div class="iwarn-sticky" aria-label="A note from me">
+      <span class="sticky-tape" aria-hidden="true"></span>
+      <span class="sticky-label">a quick note</span>
+      <p class="sticky-body">Some days I don't fully know what I'm doing either. Don't judge me.</p>
+      <svg class="sticky-arrow" viewBox="0 0 160 120" aria-hidden="true">
+        <path class="sa-line" d="M 20 20 Q 40 60 70 55 Q 110 48 140 100" fill="none"/>
+        <path class="sa-head" d="M 140 100 L 128 92 M 140 100 L 132 112" fill="none"/>
+      </svg>
+    </div>
 
     <blockquote class="iquote">Every child is an artist. The problem is how to remain an artist once we grow up.</blockquote>
     <div class="iattr"><b>Pablo Picasso</b></div>
-
-    <button class="icta" id="enterBtn" style="pointer-events:auto">Let's explore <span class="a">→</span></button>
-
-    <p class="iwarn">Fair warning, I'm a pretty random guy. Some days I don't fully know what I'm doing either. <b>Bear with me,</b> that's kind of the point.</p>
   </div>
 </section>
 
@@ -886,9 +1449,19 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
 </section>
 
 <div class="hint">
-  <span><span class="k">↑</span> <span class="k">↓</span> or scroll to orbit</span>
-  <span><span class="k">Enter</span> to open</span>
-  <span><span class="k">Esc</span> to close</span>
+  <span><span class="k">↓</span> or scroll down · next chapter</span>
+  <span><span class="k">↑</span> or scroll up · previous chapter</span>
+  <span><span class="k">Enter</span> to open · <span class="k">Esc</span> to close</span>
+</div>
+
+<!-- First-visit onboarding cue in the orbit -->
+<div id="orbitCue" aria-hidden="true">
+  <div class="cue-arrow up">↑</div>
+  <div class="cue-text">
+    <span class="cue-strong">Scroll or use arrow keys</span>
+    <span class="cue-sub">Down for next chapter, up for previous</span>
+  </div>
+  <div class="cue-arrow down">↓</div>
 </div>
 
 <!-- ABOUT -->
@@ -901,11 +1474,15 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       <h2 data-in>About <em>me.</em></h2>
       <div class="about-cols">
         <div>
-          <p data-in>I'm a content strategist and script writer. I care about why people click, why they stay, and why they pay. That's the whole job in one line.</p>
-          <p data-in>I've helped creators and brands go from invisible to unmissable. Accounts grown from zero to <b>231K+ followers</b>. Over <b>700 million views</b> generated across platforms. Individual pieces of content crossing the <b>1M view threshold</b> on a regular basis.</p>
-          <p data-in>Every script I write is built to perform, not just to sound good. Hook, build, payoff. Nothing on the page is there because it sounded nice. It's there because it earns attention or it doesn't ship.</p>
-          <p data-in>SEO is not enough anymore. Content has to be AEO ready too, discoverable by search engines and AI answer engines both.</p>
-          <p data-in>Here's the honest paradox. I write scripts for a living, but my attention span is under three seconds. I zone out in three seconds. Who better to know whether a piece will actually hold, than the worst possible viewer.</p>
+          <p data-in>On paper I'm a content strategist and script writer. In practice I study consumer psychology. <span class="mark-ink">Content is just the surface I express it through.</span> Sales, product, GTM are the other surfaces. Same skill, different canvas.</p>
+          <p data-in>The whole game, for me, is figuring out three things about a stranger. What pulls them in. What keeps them there. What makes them act. Attention, retention, conversion. Every decision I make on a page, a script, a launch plan is one of those three, or the connective tissue between them.</p>
+          <p data-in>Most people study content or sales or product. I study the human underneath all of them. Why they scroll, why they stop, why they trust, why they buy, why they come back, why they don't. Once you understand the behaviour, the surface layer is downstream.</p>
+          <p data-in>I've helped creators and brands go from invisible to unmissable. Accounts grown from zero to <b>231K+ followers</b>. Over <b>700 million views</b> generated across platforms. Individual pieces of content crossing the <b>1M threshold</b> as a regular thing, not a fluke.</p>
+          <p data-in>But views are the receipt, not the skill. The skill is knowing <span class="mark-ink">why</span> a hook works before I write it. Why one thumbnail out-clicks another before I test it. Why a landing page converts at 4% instead of 1%. Why a first-time user churns before the second session. Behaviour is predictable when you actually watch it. Most people don't watch. They optimise.</p>
+          <p data-in>A few of the patterns I've catalogued over the last few years. Pattern breaks earn attention, familiar registers earn trust. People buy when the risk of not buying feels higher than the risk of trying. Curiosity gaps outlast information. Recognition is a free hook. Specificity kills algorithm friction. Nobody wants to feel sold, everybody wants to feel understood. <span class="mark-ink">Content that ignores any of these is content that gets scrolled past.</span></p>
+          <p data-in>Every script I write is built to perform, not just to <s>sound good</s>. Hook, build, payoff. Nothing on the page is there because it sounded nice. It's there because it earns attention or it doesn't ship.</p>
+          <p data-in>SEO is not enough anymore. Content has to be AEO ready too, discoverable by search engines and AI answer engines both. The people who win the next five years will be the ones building for both a search bar and a prompt bar.</p>
+          <p data-in>Here's the honest paradox. I write scripts for a living, but my attention span is under three seconds. I zone out in three seconds. <span class="mark-ink">Who better to know whether a piece will actually hold, than the worst possible viewer.</span></p>
         </div>
         <aside class="about-stats">
           <div class="about-stat" data-in><b>700M+</b><span>views engineered</span></div>
@@ -926,34 +1503,40 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       <div class="ch-eyebrow" data-in>The journey</div>
       <h2 data-in>How I got <em>here.</em></h2>
       <div class="journey">
-        <p data-in>Right now I'm working as an independent content strategist for a handful of clients. Results in a few months. I'm sharpening my own brand at the same time. Becoming Thanos, collecting all the infinity stones. Haha.</p>
+        <p data-in>Right now I'm working as an independent content strategist for a handful of clients. Results in a few months. Alongside client work I'm sharpening the one skill everything I do is downstream of, <span class="mark-ink">reading consumer behaviour.</span> Becoming Thanos, collecting all the infinity stones. Haha.</p>
+        <p data-in>Every job below taught me a different piece of the same puzzle. How humans decide. What pulls them in. What they trust. What they buy. What they come back for. Each job just made me watch it from a different seat, content, sales, ops, product, GTM. If you follow the trail you'll see what each one forced me to actually understand about the person on the other side.</p>
 
         <p class="pause" data-in>Most recent, most raw. April to June 2026.</p>
         <p data-in>Founding GTM at a stealth AI startup in Bengaluru. I joined because challenges excite me, and I was going to own everything. Content, product, GTM, all of it. Massive opportunity to learn.</p>
-        <p data-in>Honest truth, I had my best two months here. But I joined too early. The product was still under development, and I couldn't create enough value for the team. That wasn't acceptable to me. If I'm a founding member and I'm not giving my best, I'm not justifying my seat. So I left.</p>
+        <p data-in>What this taught me. GTM isn't a launch plan, it's a bet on how a specific human will discover, evaluate, and choose you. You can't write a strategy for an audience that doesn't exist yet, which is exactly what I tried to do. That was the education.</p>
+        <p data-in>Honest truth, I had my best two months here. But I joined too early. The product was still under development, and <s>I couldn't create enough value for the team.</s> That wasn't acceptable to me. If I'm a founding member and I'm not giving my best, I'm not justifying my seat. So I left.</p>
 
         <p class="pause" data-in>Before that. March 2026.</p>
-        <p data-in>Growth intern at Human Archive, YC W26, based in Goa. Honestly, I had zero idea how I was going to survive an operations role. But the environment was great, the people were great, and for the longer run I knew operations wasn't going to be my thing.</p>
-        <p data-in>What I did get was massive. The amount I learned from my seniors, and the experience of being inside a YC accelerator, was something else. Easily one of my best internships.</p>
+        <p data-in>Growth intern at Human Archive, YC W26, based in Goa. Honestly, I had <s>zero idea</s> how I was going to survive an operations role. But the environment was great, the people were great, and for the longer run I knew operations wasn't going to be my thing.</p>
+        <p data-in>What this taught me. Being inside a YC company at that stage shows you how a real product-market fit search actually happens. Not on slides. In hundreds of tiny decisions made every week about who to say yes to and who to say no to.</p>
+        <p data-in>The amount I learned from my seniors, and the experience of being inside a YC accelerator, was something else. Easily one of my best internships.</p>
 
         <p class="pause" data-in>Before that. October 2024 to June 2025.</p>
         <p data-in>Lead Generation at Vert. Remote. This one was my turning point. Vert gave me the security and the money to <span class="aside">fck around and explore,</span> which is what my twenties were supposed to be for. I got in through a friend's referral. Worked with the founder in the early days.</p>
-        <p data-in>My output landed instantly. Partnerships were performing, and that visibility was the best motivation I've had at any job. Then I was stupid enough that after a while I called it monotonous and left, even with the pay being good. If I could rewrite one line of my career, it would be this one. <span class="aside">Don't leave Vert, man.</span> Haha.</p>
+        <p data-in>What this taught me. Sales. Not the loud pushy kind, the quiet observant kind. Vert is where I learned that <span class="mark-ink">the buying decision happens long before the pitch.</span> By the time you're talking to a lead, you've either already earned the yes or you're wasting both of your time. Every partnership I closed here I closed by reading them, not by convincing them.</p>
+        <p data-in>My output landed instantly. Partnerships were performing, and that visibility was the best motivation I've had at any job. Then I was <s>stupid</s> enough that after a while I called it monotonous and left, even with the pay being good. <span class="mark-ink">If I could rewrite one line of my career, it would be this one.</span> <span class="aside">Don't leave Vert, man.</span> Haha.</p>
 
         <p class="pause" data-in>Before that. October 2023 to May 2025.</p>
         <p data-in>Professional freelancer in social media marketing. Worked with a lot of pages. Made them grow. This is where a belief locked in that I'm still not letting go of. Content is a piece of art. It shouldn't be ruined by bombarding mass, AI produced content. The pages were the proof. They still are.</p>
+        <p data-in>What this taught me. The attention economy up close. I learned that <span class="mark-ink">people don't scroll past content, they scroll past a lack of surprise.</span> Every hook that failed for me failed because it was predictable in the first frame. Every hook that popped, popped because it broke a pattern the viewer was already in.</p>
 
         <p class="pause" data-in>Before that. April to May 2024.</p>
         <p data-in>Marketing Lead at Megascale in Surat. First time managing a team of 25 in a real professional setup. The best part was the founder was genuinely chill, which meant I could actually lead instead of performing leadership.</p>
+        <p data-in>What this taught me. That leading creative people is a design problem. You're not managing tasks, you're designing the conditions under which they'll do their best work. Same skill as designing a landing page for a first-time visitor, just applied to a person you'll see every day.</p>
 
         <p class="pause" data-in>And before all of it.</p>
-        <p data-in>Content writer. Just writing. That's where the whole thing began.</p>
+        <p data-in>Content writer. Just writing. That's where the whole thing began. Before I understood attention or sales or products, I was learning that the shape of a sentence changes whether it lands.</p>
 
         <p class="pause" data-in>If you're looking for a pattern.</p>
         <p data-in>Most people say switching is bad. I disagree. If I'm not 1000% honest and efficient at a place, I'm not happy, and if I'm not happy, I'm not going to justify being there. So I move.</p>
         <p data-in>I don't fear losing. I've walked away from good opportunities. I've been through bad situations. I've always got out. That's the muscle I'm actually training.</p>
-        <p data-in>What I have that a lot of people don't, I don't need direction to find a way through a problem, and I can't sleep until it's solved. Founder's mentality. Can't help it.</p>
-        <p data-in>The other thing. People have lost the ability to observe. I'm observing 24/7. Every reel, every conversation, every everything. That's the actual job.</p>
+        <p data-in>What I have that a lot of people don't, I don't need direction to find a way through a problem, and <span class="mark-ink">I can't sleep until it's solved.</span> Founder's mentality. Can't help it.</p>
+        <p data-in>The other thing. <span class="mark-ink">People have lost the ability to observe.</span> I'm observing 24/7. Every reel, every conversation, every everything. That's the actual job.</p>
       </div>
     </div>
   </div>
@@ -967,9 +1550,14 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     <div class="chscroll belief-body">
       <div class="ch-eyebrow" data-in>The belief</div>
       <h2 data-in>AI ruined the content world.<br><em>Art is how we take it back.</em></h2>
-      <p data-in>Content is an art. Art comes only from human intelligence and creativity. Every script here is researched, written, and rewritten by a human. Hook to CTA.</p>
+      <p data-in>This is not just an aesthetic argument. It is a consumer psychology one. Every human is now trained to recognise the shape of AI writing within a sentence or two, and once they clock it, trust drops before the second paragraph. Machine content isn't failing because it's bad. It's failing because <span class="mark-ink">the reader's guard goes up the moment they suspect no one is on the other side.</span></p>
+      <p data-in>Content is an art. Art comes only from human intelligence and creativity. Every script here is <s>generated</s> researched, written, and rewritten by a human. Hook to CTA.</p>
       <span class="belief-quiet" data-in>I don't generate. I make.</span>
       <p data-in>The feed is drowning in machine made noise. Frictionless, soulless, forgettable. I refuse to add to that pile. If you want words that were felt before they were written, that's what I do.</p>
+      <p data-in>Here's what the AI content boom actually did. It made the average piece easier to produce and <span class="mark-ink">infinitely harder to remember.</span> Everyone can now make good enough. Good enough gets scrolled past because the reader's brain filters for surprise, not accuracy. When every piece looks the same, the pattern breaker wins the whole feed.</p>
+      <p data-in>Attention isn't a resource anymore, it's a currency, and the exchange rate on generic content is collapsing. What still trades at full value is a piece of writing that reads like a person, argues like a person, breaks a pattern like a person. Machines can't do the last part yet. That's the whole trade.</p>
+      <p data-in>The behavioural rule underneath all of this. <span class="mark-ink">Humans buy from humans.</span> They watch humans, they trust humans, they refer humans. The moment content stops feeling human, the entire consumer decision funnel above it stalls. Which means AI content isn't just a taste problem, it's a conversion problem.</p>
+      <p data-in>My rule is simple. If I couldn't defend every sentence in a room full of my toughest readers, it doesn't ship. That filter kills the noise before anyone else has to sit through it.</p>
     </div>
   </div>
 </section>
@@ -982,65 +1570,86 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>The craft</div>
       <h2 data-in>The <em>map.</em></h2>
-      <p data-in>Not a framework from a book. Ten stops I actually walk through, in order, for every project. Hover any stop to see the detail.</p>
+      <p data-in>Underneath the craft is a stack of consumer psychology decisions. Every stop on this map is a specific human behaviour I'm designing for, from the first split second of attention to the last question in the buyer's head. Content is just how I execute it. Hover any stop to see the detail.</p>
 
       <div class="craft-map" data-in>
         <svg class="craft-trail" viewBox="0 0 800 1400" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M 100 80 Q 400 40 700 140 Q 400 260 100 340 Q 400 420 700 500 Q 400 620 100 700 Q 400 780 700 860 Q 400 980 100 1060 Q 400 1140 700 1220 Q 400 1300 100 1360"
-                fill="none" stroke="var(--gold)" stroke-width="1.4" stroke-dasharray="3 6" opacity=".55"/>
-          <path class="craft-trail-flow" d="M 100 80 Q 400 40 700 140 Q 400 260 100 340 Q 400 420 700 500 Q 400 620 100 700 Q 400 780 700 860 Q 400 980 100 1060 Q 400 1140 700 1220 Q 400 1300 100 1360"
-                fill="none" stroke="var(--sun)" stroke-width="2.2" stroke-dasharray="4 400" opacity=".7"/>
+          <!-- Main hand-drawn serpentine ink path — wobbly, imperfect, layered for pen-feel -->
+          <path class="craft-trail-shadow" d="M 92 74 C 250 20, 500 55, 712 148 C 545 235, 300 260, 88 342 C 240 405, 490 445, 706 502 C 550 610, 310 645, 92 712 C 250 780, 490 810, 700 866 C 545 970, 300 1000, 88 1068 C 260 1140, 500 1165, 712 1224 C 540 1305, 305 1330, 100 1362" />
+          <path class="craft-trail-ink" d="M 100 80 C 260 28, 505 58, 700 140 C 540 240, 305 262, 100 340 C 245 402, 495 448, 700 500 C 550 615, 310 640, 100 700 C 260 782, 500 810, 700 860 C 540 972, 300 1000, 100 1060 C 260 1140, 505 1165, 700 1220 C 545 1300, 300 1330, 100 1360" />
+          <!-- Direction arrows at natural pivot points -->
+          <g class="trail-arrows">
+            <path d="M 690 145 l -12 -4 l 8 8 l -8 8 l 12 -4 z" />
+            <path d="M 110 335 l 12 -4 l -8 8 l 8 8 l -12 -4 z" />
+            <path d="M 690 505 l -12 -4 l 8 8 l -8 8 l 12 -4 z" />
+            <path d="M 110 695 l 12 -4 l -8 8 l 8 8 l -12 -4 z" />
+            <path d="M 690 865 l -12 -4 l 8 8 l -8 8 l 12 -4 z" />
+            <path d="M 110 1055 l 12 -4 l -8 8 l 8 8 l -12 -4 z" />
+            <path d="M 690 1225 l -12 -4 l 8 8 l -8 8 l 12 -4 z" />
+          </g>
+          <!-- Start and end markers -->
+          <g class="trail-markers">
+            <circle class="trail-start" cx="100" cy="80" r="6" />
+            <circle class="trail-start-outer" cx="100" cy="80" r="14" />
+            <circle class="trail-end" cx="100" cy="1360" r="7" />
+          </g>
         </svg>
+
+        <!-- Hand-scrawled margin annotations that live in the empty spaces between stops -->
+        <span class="craft-note" style="--x:50%;--y:16%;--r:-4deg;">start here ↓</span>
+        <span class="craft-note" style="--x:44%;--y:41%;--r:2deg;">midpoint,<br/>trust starts</span>
+        <span class="craft-note" style="--x:52%;--y:76%;--r:-3deg;">this is where<br/>most flop 👀</span>
+        <span class="craft-note end" style="--x:44%;--y:99%;--r:-2deg;">the truth</span>
 
         <button class="stop" data-in style="--x:8%;--y:2%;">
           <span class="stop-no">01</span>
-          <span class="stop-title">Branding, before we write</span>
-          <span class="stop-body">Voice, visual language, positioning. Your content identity comes first.</span>
+          <span class="stop-title">Brand before we write</span>
+          <span class="stop-body">Voice, visual language, positioning. People trust content that feels like it came from somewhere, not from nowhere. Identity earns the second scroll.</span>
         </button>
         <button class="stop" data-in style="--x:74%;--y:10%;">
           <span class="stop-no">02</span>
-          <span class="stop-title">Every channel has a register</span>
-          <span class="stop-body">Educational, entertaining, raw, aspirational. I find yours and write exclusively in it.</span>
+          <span class="stop-title">Match the register</span>
+          <span class="stop-body">Educational, entertaining, raw, aspirational. Whichever tone your audience is already listening in, I write in. Familiarity is a shortcut to trust.</span>
         </button>
         <button class="stop" data-in style="--x:6%;--y:22%;">
           <span class="stop-no">03</span>
-          <span class="stop-title">Data shapes the story</span>
-          <span class="stop-body">Deep dive into what your audience actually watches, searches for, and shares.</span>
+          <span class="stop-title">The audience is talking</span>
+          <span class="stop-body">Search terms, comment patterns, watch behaviour. They're telling you what they want. Most people don't listen. I do.</span>
         </button>
         <button class="stop" data-in style="--x:74%;--y:34%;">
           <span class="stop-no">04</span>
-          <span class="stop-title">Find the gaps, fill them</span>
-          <span class="stop-body">Study what's already working in your niche. Spot what everyone is missing. Own the lane.</span>
+          <span class="stop-title">Find the gap, own it</span>
+          <span class="stop-body">Study what's already working in your niche. Find what nobody is saying yet. Position to own that lane before it gets crowded.</span>
         </button>
         <button class="stop" data-in style="--x:6%;--y:47%;">
           <span class="stop-no">05</span>
-          <span class="stop-title">Relevant. Timely. Searchable</span>
-          <span class="stop-body">Not just trending. Topics specific to your audience's intent and stage of awareness.</span>
+          <span class="stop-title">Right topic, right moment</span>
+          <span class="stop-body">Not just trending. Specific to your audience's intent, awareness stage, and where they are in their day. Timing is half of relevance.</span>
         </button>
         <button class="stop" data-in style="--x:74%;--y:58%;">
           <span class="stop-no">06</span>
-          <span class="stop-title">Hook. Build. Payoff</span>
-          <span class="stop-body">Every line earns its place. Scripts built to hold from the first second to the last.</span>
+          <span class="stop-title">Hook. Build. Payoff.</span>
+          <span class="stop-body">First frame breaks their scroll pattern. Middle builds a curiosity gap they can't leave open. Payoff resolves it in a way that feels earned. That's the whole craft in three moves.</span>
         </button>
         <button class="stop" data-in style="--x:6%;--y:70%;">
           <span class="stop-no">07</span>
           <span class="stop-title">Half the battle is being found</span>
-          <span class="stop-body">Optimised for search engines and AI answer engines both. Discoverability isn't optional.</span>
+          <span class="stop-body">Optimised for search engines and AI answer engines both. Discoverability isn't optional anymore. The best script no one sees is not a script, it's a diary entry.</span>
         </button>
         <button class="stop" data-in style="--x:74%;--y:82%;">
           <span class="stop-no">08</span>
           <span class="stop-title">The script test</span>
-          <span class="stop-body">I read it aloud. If I feel the vibe, it's a go. If I'm confused, I hand it to random people and watch them react.</span>
+          <span class="stop-body">I read it aloud. If I feel the vibe, it's a go. If I'm confused, I hand it to random people and watch them react. Their face at second three is the only research that matters.</span>
         </button>
         <button class="stop" data-in style="--x:6%;--y:93%;">
           <span class="stop-no">09</span>
           <span class="stop-title">The hook diagnosis</span>
-          <span class="stop-body">First rule of sales, they can't feel sold. Would I stop for this? Answer honestly.</span>
+          <span class="stop-body">First rule of sales, they can't feel sold. If a hook worked for someone else, don't clone it. Ask honestly: would I stop for this? If not, rewrite until yes.</span>
         </button>
         <button class="stop" data-in style="--x:74%;--y:97%;">
           <span class="stop-no">10</span>
           <span class="stop-title">The long-form truth</span>
-          <span class="stop-body">Perfect scripts flop. Weird ones win. Be authentic, stay relevant.</span>
+          <span class="stop-body">Perfect scripts flop. Weird ones win. The one you think is a slam dunk underperforms. The one you almost didn't ship breaks the internet. Be authentic, stay relevant, and don't out-think your gut.</span>
         </button>
       </div>
     </div>
@@ -1055,11 +1664,13 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>Selected works, 700M+ views</div>
       <h2 data-in>Selected <em>works.</em></h2>
+      <p data-in style="font-family:var(--f-diary);font-size:clamp(16px,1.5vw,18px);color:var(--diary-ink);line-height:1.65;margin-bottom:clamp(20px,3vh,28px);max-width:60ch">Numbers below are the receipts. What matters more is the behavioural lever each one pulled to get there. I've noted it under each.</p>
       <div class="works-list">
         <article class="work" data-in>
           <div><div class="mark">Personal brand · <b>Instagram</b></div><h3 class="wname">Nidhi <em>Soni</em></h3></div>
           <div>
             <p>@nidhisoniofficial. Branding and content, end to end. Positioning, identity, and every piece of content on the page.</p>
+            <p><span class="mark-ink">Lever pulled.</span> Parasocial trust through a repeatable emotional register. Same voice every post, so viewers stopped feeling like strangers by post four.</p>
             <div class="wnums"><div><b>11M</b><span>views · 30 days</span></div><div><b>+25K</b><span>followers · 30 days</span></div></div>
             <div class="tags"><span class="tag">Personal Branding</span><span class="tag">Content Strategy</span><span class="tag">Reels</span></div>
             <a class="wlink" href="https://www.instagram.com/nidhisoniofficial" target="_blank" rel="noopener">View profile ↗</a>
@@ -1069,6 +1680,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
           <div><div class="mark">Content ideation · <b>Instagram · 335K</b></div><h3 class="wname">Artoonzz <em>(AR)</em></h3></div>
           <div>
             <p>Content strategy behind a 335K follower animated page. Character driven storytelling that turned everyday Indian moments into content that consistently crossed millions of views.</p>
+            <p><span class="mark-ink">Lever pulled.</span> Cultural recognition. Every reel opened with a moment every Indian household has lived. Recognition is a free hook. Once you're in, the character does the rest.</p>
             <div class="wnums"><div><b>100M+</b><span>total views generated</span></div></div>
             <div class="tags"><span class="tag">Content Ideation</span><span class="tag">Animation Strategy</span><span class="tag">Reels</span></div>
             <a class="wlink" href="https://www.instagram.com/artoonzz_" target="_blank" rel="noopener">View profile ↗</a>
@@ -1078,6 +1690,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
           <div><div class="mark">Script strategy · <b>YouTube</b></div><h3 class="wname">40 Secs <em>Football</em></h3></div>
           <div>
             <p>Content identity and scripting pipeline for a fast format football channel. Ultra short, high intensity concepts engineered for retention.</p>
+            <p><span class="mark-ink">Lever pulled.</span> Compressed payoff density. Every 40 seconds delivered a full narrative arc, so the reward-to-time ratio beat every longer competitor. Pattern completion is the strongest retention signal there is.</p>
             <div class="wnums"><div><b>131M+</b><span>lifetime views</span></div><div><b style="font-size:clamp(18px,2vw,20px);font-style:italic">Corner Taken Quickly</b><span>top post</span></div></div>
             <div class="tags"><span class="tag">YouTube Shorts</span><span class="tag">Script Strategy</span><span class="tag">Retention</span></div>
             <a class="wlink" href="https://www.youtube.com/@40secsfootball" target="_blank" rel="noopener">View channel ↗</a>
@@ -1087,6 +1700,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
           <div><div class="mark">Virality · <b>YouTube</b></div><h3 class="wname">Patrick <em>Football</em></h3></div>
           <div>
             <p>Concepts and scripting for a viral football page. Emotional storytelling around iconic moments drove massive non follower reach and repeat viewership.</p>
+            <p><span class="mark-ink">Lever pulled.</span> Emotional recall. Anchoring each script to a moment fans already had a feeling about meant the algorithm didn't have to work to earn engagement. The audience showed up pre-primed.</p>
             <div class="wnums"><div><b>184M+</b><span>lifetime views</span></div><div><b style="font-size:clamp(18px,2vw,20px);font-style:italic">This Goal</b><span>top post</span></div></div>
             <div class="tags"><span class="tag">YouTube Strategy</span><span class="tag">Concept Writing</span><span class="tag">Virality</span></div>
             <a class="wlink" href="https://www.youtube.com/@patrickfootball-n9w" target="_blank" rel="noopener">View channel ↗</a>
@@ -1096,6 +1710,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
           <div><div class="mark">Countdown format · <b>Instagram</b></div><h3 class="wname">Solo <em>Scorers</em></h3></div>
           <div>
             <p>Football countdown page from scratch. Numbered player series drove high repeat viewership and consistent saves.</p>
+            <p><span class="mark-ink">Lever pulled.</span> Curiosity gap architecture. Numbered rankings force viewers to wait for the top spot. Save rate spikes because they want to finish it later. Simple, ancient, still undefeated.</p>
             <div class="wnums"><div><b>58.7K</b><span>followers</span></div><div><b>2.1M</b><span>accounts reached · 30d</span></div></div>
           </div>
         </article>
@@ -1103,6 +1718,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
           <div><div class="mark">Niche launch · <b>Instagram</b></div><h3 class="wname">Solo Goals <em>in Football</em></h3></div>
           <div>
             <p>Launched a niche solo goals page that hit 29.7K followers in only 5 posts, reaching 2.5M accounts through scroll stopping football clips.</p>
+            <p><span class="mark-ink">Lever pulled.</span> Ultra-narrow niche + high-emotion clips. Specificity kills algorithm friction. A page called "solo goals" tells the feed exactly where to send it, and the clips did the rest.</p>
             <div class="wnums"><div><b>29.7K</b><span>followers · 5 posts</span></div><div><b>2.5M</b><span>accounts reached · 30d</span></div></div>
           </div>
         </article>
@@ -1119,21 +1735,36 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>The side projects</div>
       <h2 data-in>Things I'm <em>building.</em></h2>
-      <p data-in>I don't just write about products, I build them. Two live right now, both born from an itch I couldn't stop scratching.</p>
+      <p data-in>I don't just write about products, I build them. Two live right now. One is proof of how I think about GTM end to end. The other is the one I care about more than anything else.</p>
+
       <div class="works-list">
         <article class="work" data-in>
-          <div><div class="mark">GTM strategy · <b>Case study</b></div><h3 class="wname">Electric<em>Pe</em></h3></div>
+          <div><div class="mark">Full GTM Strategy · <b>Hyderabad launch</b></div><h3 class="wname">Electric<em>Pe</em></h3></div>
           <div>
-            <p>Full GTM strategy for ElectricPe's EV Mobility Centre rollout. Market sizing, customer segmentation, channel selection, and geographic zone prioritisation, all defined to answer where and how to enter the market.</p>
-            <div class="tags"><span class="tag">GTM Strategy</span><span class="tag">Market Research</span><span class="tag">Launch Planning</span></div>
-            <a class="wlink" href="https://electric-pe-project.vercel.app" target="_blank" rel="noopener">View case study ↗</a>
+            <p>Complete end to end market entry strategy for ElectricPe's EV Mobility Centre in Hyderabad. Not a slide deck, a real 3 year rollout plan with unit economics, market sizing, LTV to CAC modelling, and a month by month execution roadmap.</p>
+            <p><span class="mark-ink">What went into it.</span> Market analysis of the Hyderabad EV opportunity. Sizing that separated TAM from SAM from the SOM actually reachable in year one. Customer segmentation into commercial fleets, last mile delivery, and personal EVs, each with a different acquisition motion. Zone prioritisation on top of that so we knew which corridors to open first and why. Channel selection matched to segment. A 3 year P&L with revenue projections and cost structure. Break even math. Risk assessment.</p>
+            <p><span class="mark-ink">Why I built it this deep.</span> Most GTM plans stop at "here's the audience, here's the channel." That's the easy half. The hard half is the sequencing. Which zone first, which segment first, which channel first, and what does month seven look like if month three didn't hit. That's what this covers. Numbers are estimates, but the reasoning is the actual product.</p>
+            <div class="tags"><span class="tag">GTM Strategy</span><span class="tag">Market Sizing</span><span class="tag">Unit Economics</span><span class="tag">Zone Prioritisation</span><span class="tag">3 Year Rollout</span></div>
+            <a class="wlink" href="https://electric-pe-project.vercel.app" target="_blank" rel="noopener">View the full case study ↗</a>
           </div>
         </article>
+
         <article class="work" data-in>
-          <div><div class="mark">Live product · <b>In building</b></div><h3 class="wname">Mind<em>Care</em></h3></div>
+          <div><div class="mark">Live product · <b>The one that matters</b></div><h3 class="wname">Mind<em>Care</em></h3></div>
           <div>
-            <p>A companion that feels like a friend, works like a therapist. Started from a real observation, the mental health app space has a retention problem and it's not because the apps are bad. It's because activation is broken. People open once, feel assessed, never come back. Churn is a positioning bug, not a product bug. So I started building the opposite.</p>
-            <div class="tags"><span class="tag">Retention Problem</span><span class="tag">Self-training Algorithm</span><span class="tag">0 to 1 Build</span><span class="tag">Mental Health Tech</span></div>
+            <p>AI counselling for mental health. A companion that feels like a friend, works like a therapist. This is not a side project. This is the thing I'm going to finish no matter how long it takes.</p>
+
+            <p><span class="mark-ink">Why this one.</span> I was depressed in college for a few months. I had people around me. It didn't help. That's the part most people don't understand until they've been there. You can be surrounded and still be alone with what's happening inside your head.</p>
+
+            <p>I got out. Not everyone does. That fact doesn't leave me alone.</p>
+
+            <p>The two options India offers a young person in that state are both broken. ChatGPT butters you, tells you what you want to hear, has no clinical instinct, sometimes makes it worse. Offline therapy is 1,500 to 5,000 rupees a session in the cities that even have therapists, which is not most of India. So the youth are stuck between a chatbot that flatters and a service they can't afford. That's a market failure with a body count.</p>
+
+            <p><span class="mark-ink">What MindCare is designed to do.</span> Not replace a therapist. Sit between you and the moment where you'd otherwise spiral alone. Trained on real counselling frameworks, not general LLM training. Feels like a friend on purpose because that's what activation actually needs. Most mental health apps lose users because the second the app feels clinical, users feel like patients, and no one wants to feel like a patient. Churn is a positioning bug, not a product bug. I'm building the opposite.</p>
+
+            <p><span class="mark-ink">Why I know I'll finish it.</span> Because Indian youth needs this and I know what it feels like when it's you. If MindCare saves one life, it's justified. If it scales, it saves millions. That's not marketing language for me. That's the reason this exists.</p>
+
+            <div class="tags"><span class="tag">Mental Health</span><span class="tag">AI Counselling</span><span class="tag">Activation Design</span><span class="tag">Retention as Positioning</span><span class="tag">0 to 1 Build</span><span class="tag">Mission</span></div>
             <a class="wlink" href="https://mindcaree-henna.vercel.app/login" target="_blank" rel="noopener">See the preview ↗</a>
           </div>
         </article>
@@ -1150,18 +1781,20 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     <div class="chscroll">
       <div class="ch-eyebrow" data-in>The ambition</div>
       <h2 data-in>Where this <em>is going.</em></h2>
-      <p class="amb-lead" data-in>I want to conquer the world. You won't meet anyone more optimistic than me about it.</p>
       <p data-in>I have too many goals to hold, and I keep raising the bar on myself. I've left good opportunities. I've been through bad situations. I've always got out. That's the muscle I'm training. Not fearing loss.</p>
       <span class="vow" data-in>In three years, <em>CEO. CPO. CMO. Or founding member.</em></span>
-      <p data-in>Depending on which room I choose to walk into next. I'm choosy on purpose. I don't want to work on a wrapper for a fake valuation number.</p>
-      <p data-in>I want to do real work. AI is getting funded heavily. Doesn't matter. I want something unique. Something that earns its place in the market the way <span class="it">Netflix earned India</span>, the way <span class="it">luxury brands cracked a price sensitive market</span> without lowering themselves.</p>
+      <p data-in>Depending on which room I choose to walk into next. I'm choosy on purpose. I don't want to work on a wrapper for a fake valuation number. I want to do real work on a real market with a real thesis behind it.</p>
+      <p data-in>AI is getting funded heavily. Doesn't matter. Most of it is going to die inside two years. I want something unique. Something that earns its place in the market the way <span class="it">Netflix earned India</span>, the way <span class="it">luxury brands cracked a price sensitive market</span> without lowering themselves. Those are the studies I keep going back to.</p>
       <p data-in style="font-family:var(--f-serif);font-style:italic;font-size:clamp(20px,3vw,30px);color:var(--gold-deep);line-height:1.25;margin:24px 0;max-width:32ch">I'm not building anything. I'm an explorer.</p>
       <p data-in>I chase what will give me vibes and challenges. That's the compass. Titles will follow the compass, not the other way around.</p>
+
       <p data-in style="margin-top:22px"><b>The bets I'd place, that not enough people are placing.</b></p>
       <ul class="amb-list">
-        <li data-in><b>Long form content.</b> It looks like it's burning. It isn't. In the fast pace of AI, authentic long form value is what will keep us alive. I'm starting my own channel to prove it.</li>
-        <li data-in>Attention isn't dying. <b>Observation is.</b> People have stopped watching the world. That's a market.</li>
-        <li data-in>Everything worth making now will be made <b>by a human, on purpose.</b> The premium on that is only going up.</li>
+        <li data-in><b>Long form content is coming back.</b> It looks like it's burning. It isn't. In the fast pace of AI, <span class="mark-ink">authentic long form value is what will keep us alive.</span> Everyone can produce short. Almost no one can hold you for twenty minutes. That's the arbitrage. I'm starting my own channel to prove it.</li>
+        <li data-in><s>Attention isn't dying.</s> <b>Observation is.</b> People have stopped watching the world. Whoever can still notice, still name a feeling nobody else has put words on, gets paid. That's a market and nobody is talking about it yet.</li>
+        <li data-in>Everything worth making now will be made <span class="mark-ink">by a human, on purpose.</span> The premium on that is only going up. In five years "human made" will be a label on content the way "handmade" is on furniture.</li>
+        <li data-in><b>India is the market of the decade,</b> and most global brands don't understand it yet. Whoever cracks price-sensitive positioning without lowering the brand wins the next generation. That's a study I'm quietly running on the side.</li>
+        <li data-in><b>Mental health is not a product category, it's an infrastructure gap.</b> The next serious wave of Indian consumer tech is going to be built around emotional accessibility, and MindCare is my early answer to that.</li>
       </ul>
       <p data-in style="margin-top:24px">If you're building something real and you want a founding brain who thinks in stories, systems, and the three seconds before a thumb moves, <b>that's the room I'm looking for next.</b></p>
     </div>
@@ -1295,6 +1928,30 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   var enterBtn=document.getElementById("enterBtn");
   setTimeout(function(){ iwrap.classList.add("show"); }, 100);
 
+  // Signature moment: fade in the drawing arc and drift cloud
+  var sigArc=document.getElementById("signature-arc");
+  var driftCloud=document.getElementById("drift-cloud");
+  setTimeout(function(){
+    if(sigArc) sigArc.classList.add("on");
+    if(driftCloud) driftCloud.classList.add("on");
+  }, 300);
+
+  // Lazy cursor-following cloud
+  if(driftCloud && !RM){
+    var dcx=window.innerWidth*0.5, dcy=window.innerHeight*0.4;
+    var dctx=dcx, dcty=dcy;
+    document.addEventListener("mousemove", function(e){
+      dctx = e.clientX;
+      dcty = e.clientY;
+    });
+    (function driftLoop(){
+      dcx += (dctx - dcx) * 0.02;
+      dcy += (dcty - dcy) * 0.02;
+      driftCloud.style.transform = "translate("+(dcx - 260)+"px,"+(dcy - 170)+"px)";
+      requestAnimationFrame(driftLoop);
+    })();
+  }
+
   var dust=document.getElementById("dust");
   var COLORS=["#FFFFFF","#EAF3FA","#F4C97A","#C4A265","#C5DDEE"];
   function shatterAndAssemble(){
@@ -1321,6 +1978,8 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     dust.appendChild(frag);
     dust.classList.add("on");
     intro.classList.add("gone");
+    if(sigArc) sigArc.classList.remove("on");
+    if(driftCloud) driftCloud.classList.remove("on");
 
     motes.forEach(function(o){
       var dx=(Math.random()-.5)*180;
@@ -1355,6 +2014,11 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
         document.getElementById("orbit").classList.add("show");
         setMode("orbit");
         updateNodes();
+        // Show onboarding cue on first orbit entry
+        var cue = document.getElementById("orbitCue");
+        if(cue && !cue.dataset.seen){
+          setTimeout(function(){ cue.classList.add("on"); }, 600);
+        }
       }, 400);
       setTimeout(function(){
         dust.classList.remove("on");
@@ -1371,6 +2035,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       // close any open chamber
       var open = document.querySelector(".chamber.open");
       if(open) open.classList.remove("open");
+      if(topBar) topBar.classList.remove("chamber-open");
       // hide orbit
       var orbitEl = document.getElementById("orbit");
       orbitEl.classList.remove("show");
@@ -1379,6 +2044,8 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       iwrap.classList.remove("show");
       setTimeout(function(){ iwrap.classList.add("show"); }, 100);
       setMode("entrance");
+      if(sigArc) sigArc.classList.add("on");
+      if(driftCloud) driftCloud.classList.add("on");
       // reset focus to default chapter
       focused = DEFAULT_INDEX;
       updateBrief(CHAPTERS[focused]);
@@ -1386,9 +2053,20 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
   }
 
   var wheelLock=false;
+  function dismissCue(){
+    var cue = document.getElementById("orbitCue");
+    if(cue && !cue.dataset.seen){
+      cue.dataset.seen = "1";
+      cue.classList.add("dismissed");
+      setTimeout(function(){ cue.classList.remove("on"); }, 600);
+    }
+  }
+  var orbitCueEl = document.getElementById("orbitCue");
+  if(orbitCueEl) orbitCueEl.addEventListener("click", dismissCue);
   window.addEventListener("wheel", function(e){
     if(!document.getElementById("orbit").classList.contains("show")) return;
     if(document.querySelector(".chamber.open")) return;
+    dismissCue();
     if(wheelLock) return;
     wheelLock=true;
     if(e.deltaY>0) focusNode(focused+1);
@@ -1419,6 +2097,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       if(dx < 0) focusNode(focused+1);
       else focusNode(focused-1);
     }
+    dismissCue();
   }, {passive:true});
 
   window.addEventListener("keydown", function(e){
@@ -1432,8 +2111,8 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
       if(e.key==="Enter") enterBtn.click();
       return;
     }
-    if(e.key==="ArrowDown"||e.key==="ArrowRight"){ e.preventDefault(); focusNode(focused+1); }
-    else if(e.key==="ArrowUp"||e.key==="ArrowLeft"){ e.preventDefault(); focusNode(focused-1); }
+    if(e.key==="ArrowDown"||e.key==="ArrowRight"){ e.preventDefault(); focusNode(focused+1); dismissCue(); }
+    else if(e.key==="ArrowUp"||e.key==="ArrowLeft"){ e.preventDefault(); focusNode(focused-1); dismissCue(); }
     else if(e.key==="Enter"){ e.preventDefault(); openChamber(CHAPTERS[focused].id); }
   });
 
@@ -1442,6 +2121,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     if(!el) return;
     el.classList.add("open");
     el.querySelector(".chscroll").scrollTop=0;
+    if(topBar) topBar.classList.add("chamber-open");
     var ins=el.querySelectorAll("[data-in]");
     ins.forEach(function(x){x.classList.remove("on");});
     ins.forEach(function(x,i){setTimeout(function(){x.classList.add("on");}, 100+i*40);});
@@ -1450,6 +2130,7 @@ button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:0
     var open=document.querySelector(".chamber.open");
     if(!open) return;
     open.classList.remove("open");
+    if(topBar) topBar.classList.remove("chamber-open");
   }
   document.querySelectorAll("[data-close]").forEach(function(b){b.addEventListener("click", closeChamber);});
   document.querySelectorAll(".chbg").forEach(function(b){b.addEventListener("click", closeChamber);});
